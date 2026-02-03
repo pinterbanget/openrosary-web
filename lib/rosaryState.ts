@@ -192,8 +192,11 @@ export class RosaryState {
                 if (this.prayerCount === 0) {
                     const mysteries = getMysteries(this.mysteryType, this.language);
                     const mystery = mysteries[Math.min(this.mysteryIndex, 4)];
-                    const mysteryLabel = this.language === 'id' ? 'Peristiwa' : 'Mystery';
-                    return `${this.getMysteryType()} ${mysteryLabel} #${this.decadeCount}: ${mystery.title}\n\n${mystery.description}`;
+                    if (this.language === 'id') {
+                        return `Peristiwa ${this.getMysteryType()} #${this.decadeCount}: ${mystery.title}\n\n${mystery.description}`;
+                    } else {
+                        return `${this.getMysteryType()} Mystery #${this.decadeCount}: ${mystery.title}\n\n${mystery.description}`;
+                    }
                 }
                 if (this.prayerCount === 1) return PRAYERS.ourFather;
                 if (this.prayerCount >= 2 && this.prayerCount <= 11) return PRAYERS.hailMary;

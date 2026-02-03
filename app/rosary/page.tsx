@@ -216,7 +216,7 @@ function RosaryContent() {
                         <h3>{language === 'id' ? 'rosario selesai' : 'rosary complete'}</h3>
                         <p className="muted">
                             {language === 'id'
-                                ? `Anda telah menyelesaikan peristiwa ${rosaryState.getMysteryType()} Rosario Suci. Tuhan memberkati Anda.`
+                                ? `Anda telah menyelesaikan Peristiwa ${rosaryState.getMysteryType()} Rosario Suci. Tuhan memberkati Anda.`
                                 : `You have completed the ${rosaryState.getMysteryType()} mysteries of the Holy Rosary. God bless you.`}
                         </p>
                         <button onClick={() => router.push('/')}>
