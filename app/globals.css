@@ -1,0 +1,389 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
+
+:root {
+  --bg: #071017;
+  --panel: #0b1220;
+  --muted: #9aa6b2;
+  --accent: #00e6a8;
+  --glass: rgba(255, 255, 255, 0.03);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'JetBrains Mono', monospace;
+  background: linear-gradient(180deg, #061018 0%, #041018 60%);
+  color: #dbe9ef;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+/* Hero / Home Page */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero-content {
+  width: 100%;
+}
+
+.site-title {
+  font-size: clamp(38px, 9vw, 88px);
+  margin: 0 0 8px;
+  color: var(--accent);
+  letter-spacing: -2px;
+}
+
+.site-title::after {
+  content: ';';
+  color: var(--accent);
+  opacity: 0.85;
+  margin-left: 6px;
+}
+
+.tagline {
+  color: var(--muted);
+  margin: 0 0 18px;
+  font-size: 18px;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 16px;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+/* Mysteries Grid - styled like socials nav */
+.mysteries-grid {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.mystery-btn {
+  color: var(--muted);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: all 0.18s;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.mystery-btn:hover {
+  color: #fff;
+  border-color: rgba(0, 230, 168, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 230, 168, 0.06);
+}
+
+/* Rosary Page - matching Android app layout */
+.rosary-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.rosary-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.back-link {
+  display: inline-block;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--accent);
+}
+
+/* Rosary header with back link and language toggle */
+.rosary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.lang-dropdown {
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--muted);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.18s;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239aa6b2' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px;
+}
+
+.lang-dropdown:hover,
+.lang-dropdown:focus {
+  color: var(--accent);
+  border-color: rgba(0, 230, 168, 0.2);
+  outline: none;
+}
+
+.lang-dropdown option {
+  background: var(--panel);
+  color: #dbe9ef;
+}
+
+/* Mystery Title - top, centered, large */
+.mystery-title {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--accent);
+  margin-bottom: 24px;
+  min-height: 2em;
+}
+
+/* Prayer Label - centered, medium */
+.prayer-label {
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 16px;
+  color: #dbe9ef;
+}
+
+/* Prayer Text - scrollable container in the middle */
+.prayer-container {
+  flex: 1;
+  min-height: 200px;
+  max-height: calc(100vh - 380px);
+  overflow-y: auto;
+  background: var(--panel);
+  border-radius: 10px;
+  border: 1px solid var(--glass);
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.prayer-container::before {
+  content: '';
+  display: block;
+  height: 1px;
+  margin-bottom: 16px;
+  background: linear-gradient(90deg, rgba(0, 230, 168, 0.08), transparent);
+}
+
+.prayer-text {
+  font-size: 16px;
+  line-height: 1.6;
+  white-space: pre-line;
+  color: #dbe9ef;
+}
+
+/* Progress Bar - near bottom */
+.progress-section {
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* Instructions - at very bottom */
+.instructions {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 16px;
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 8, 0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 60;
+}
+
+.modal-backdrop.open {
+  display: flex;
+}
+
+.modal {
+  background: linear-gradient(180deg, var(--panel), #07121a);
+  max-width: 500px;
+  width: 100%;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+}
+
+.modal h3 {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: 24px;
+}
+
+.modal h3::after {
+  content: ';';
+  opacity: 0.85;
+  margin-left: 4px;
+}
+
+.modal .muted {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.modal button {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  padding: 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.modal button:hover {
+  color: #fff;
+  border-color: rgba(0, 230, 168, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 230, 168, 0.06);
+}
+
+/* Loading */
+.loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* Reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.2, .9, .3, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .container {
+    padding: 40px 20px;
+  }
+
+  .rosary-container {
+    padding: 20px;
+  }
+
+  .site-title {
+    font-size: 42px;
+  }
+
+  .mysteries-grid {
+    flex-direction: column;
+  }
+
+  .mystery-btn {
+    text-align: center;
+  }
+
+  .mystery-title {
+    font-size: 20px;
+  }
+
+  .prayer-label {
+    font-size: 16px;
+  }
+
+  .prayer-container {
+    padding: 16px;
+  }
+
+  .prayer-text {
+    font-size: 14px;
+  }
+}
