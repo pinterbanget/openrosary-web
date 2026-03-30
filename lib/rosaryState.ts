@@ -1,4 +1,4 @@
-import { getPrayers, getPrayerTitles, getMysteries, getMysteryTypeName, type MysteryType, type Language } from './prayers';
+import { getPrayers, getPrayerTitles, getMysteries, getMysteryTypeName, type MysteryType, type Language, type PrayerLanguage } from './prayers';
 
 // Rosary stages
 export const STAGE_INTRO = 0;
@@ -15,10 +15,12 @@ export class RosaryState {
     private decadeCount: number;
     private complete: boolean;
     private language: Language;
+    private prayerLanguage: PrayerLanguage;
 
-    constructor(mysteryType: MysteryType, language: Language = 'en') {
+    constructor(mysteryType: MysteryType, language: Language = 'en', prayerLanguage: PrayerLanguage = language) {
         this.mysteryType = mysteryType;
         this.language = language;
+        this.prayerLanguage = prayerLanguage;
         this.stage = STAGE_INTRO;
         this.mysteryIndex = 0;
         this.prayerCount = 0;
@@ -33,6 +35,14 @@ export class RosaryState {
 
     getLanguage(): Language {
         return this.language;
+    }
+
+    setPrayerLanguage(lang: PrayerLanguage) {
+        this.prayerLanguage = lang;
+    }
+
+    getPrayerLanguage(): PrayerLanguage {
+        return this.prayerLanguage;
     }
 
     // Advance to the next prayer - only updates state, use getCurrentPrayerText() to get content
@@ -174,7 +184,7 @@ export class RosaryState {
 
     // Get current prayer text - always use this to get prayer content
     getCurrentPrayerText(): string {
-        const PRAYERS = getPrayers(this.language);
+        const PRAYERS = getPrayers(this.prayerLanguage);
 
         switch (this.stage) {
             case STAGE_INTRO:
@@ -218,7 +228,7 @@ export class RosaryState {
 
     // Get current prayer label/title
     getCurrentPrayerLabel(): string {
-        const PRAYER_TITLES = getPrayerTitles(this.language);
+        const PRAYER_TITLES = getPrayerTitles(this.prayerLanguage);
 
         switch (this.stage) {
             case STAGE_INTRO:

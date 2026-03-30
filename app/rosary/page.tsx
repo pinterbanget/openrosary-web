@@ -4,13 +4,14 @@ import { useEffect, useState, useRef, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { RosaryState } from '@/lib/rosaryState';
 import { singleVibrate, tripleVibrate, doubleVibrate } from '@/lib/vibration';
-import { AVAILABLE_LANGUAGES, type MysteryType, type Language } from '@/lib/prayers';
+import { AVAILABLE_LANGUAGES, AVAILABLE_PRAYER_LANGUAGES, type MysteryType, type Language, type PrayerLanguage } from '@/lib/prayers';
 
 function RosaryContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const mysteryParam = searchParams.get('mystery') as MysteryType | null;
     const langParam = searchParams.get('lang') as Language | null;
+    const prayerLangParam = searchParams.get('prayers') as PrayerLanguage | null;
 
     const [rosaryState, setRosaryState] = useState<RosaryState | null>(null);
     const [prayerText, setPrayerText] = useState('');
@@ -19,6 +20,7 @@ function RosaryContent() {
     const [progress, setProgress] = useState(0);
     const [showCompletion, setShowCompletion] = useState(false);
     const [language, setLanguage] = useState<Language>('en');
+    const [prayerLanguage, setPrayerLanguage] = useState<PrayerLanguage>('en');
 
     const touchStartX = useRef(0);
     const touchEndX = useRef(0);
@@ -42,6 +44,21 @@ function RosaryContent() {
         setProgress(state.getTotalCount());
     };
 
+    const syncQuery = (nextLanguage: Language, nextPrayerLanguage: PrayerLanguage) => {
+        if (!mysteryParam) return;
+
+        const params = new URLSearchParams();
+        params.set('mystery', mysteryParam);
+        if (nextLanguage !== 'en') {
+            params.set('lang', nextLanguage);
+        }
+        if (nextPrayerLanguage !== nextLanguage) {
+            params.set('prayers', nextPrayerLanguage);
+        }
+
+        router.replace(`/rosary?${params.toString()}`, { scroll: false });
+    };
+
     // Initialize rosary state
     useEffect(() => {
         if (!mysteryParam || !['joyful', 'luminous', 'sorrowful', 'glorious'].includes(mysteryParam)) {
@@ -50,14 +67,18 @@ function RosaryContent() {
         }
 
         const lang = langParam === 'id' ? 'id' : 'en';
+        const prayerLang = prayerLangParam === 'la' || prayerLangParam === 'id' || prayerLangParam === 'en'
+            ? prayerLangParam
+            : lang;
         setLanguage(lang);
+        setPrayerLanguage(prayerLang);
 
-        const state = new RosaryState(mysteryParam, lang);
+        const state = new RosaryState(mysteryParam, lang, prayerLang);
         // State starts at prayerCount=0 which is the first prayer - no need to advance
         updateUIFromState(state);
         setRosaryState(state);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [mysteryParam, langParam]);
+    }, [mysteryParam, langParam, prayerLangParam]);
 
     // Handle language change from dropdown
     const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -65,6 +86,16 @@ function RosaryContent() {
         const newLang = e.target.value as Language;
         setLanguage(newLang);
         rosaryState.setLanguage(newLang);
+        syncQuery(newLang, rosaryState.getPrayerLanguage());
+        updateUIFromState(rosaryState);
+    };
+
+    const handlePrayerLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        if (!rosaryState) return;
+        const newPrayerLang = e.target.value as PrayerLanguage;
+        setPrayerLanguage(newPrayerLang);
+        rosaryState.setPrayerLanguage(newPrayerLang);
+        syncQuery(rosaryState.getLanguage(), newPrayerLang);
         updateUIFromState(rosaryState);
     };
 
@@ -165,18 +196,38 @@ function RosaryContent() {
                 {/* Header with back link and language dropdown */}
                 <div className="rosary-header">
                     <a href="/" className="back-link">← back</a>
-                    <select
-                        value={language}
-                        onChange={handleLanguageChange}
-                        className="lang-dropdown"
-                        aria-label="Select language"
-                    >
-                        {AVAILABLE_LANGUAGES.map(lang => (
-                            <option key={lang.code} value={lang.code}>
-                                {lang.nativeLabel}
-                            </option>
-                        ))}
-                    </select>
+                    <div className="header-controls">
+                        <label className="control-group">
+                            <span className="control-label">{language === 'id' ? 'bacaan' : 'readings'}</span>
+                            <select
+                                value={language}
+                                onChange={handleLanguageChange}
+                                className="lang-dropdown"
+                                aria-label="Select reading language"
+                            >
+                                {AVAILABLE_LANGUAGES.map(lang => (
+                                    <option key={lang.code} value={lang.code}>
+                                        {lang.nativeLabel}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                        <label className="control-group">
+                            <span className="control-label">{language === 'id' ? 'doa' : 'prayers'}</span>
+                            <select
+                                value={prayerLanguage}
+                                onChange={handlePrayerLanguageChange}
+                                className="lang-dropdown"
+                                aria-label="Select prayer language"
+                            >
+                                {AVAILABLE_PRAYER_LANGUAGES.map(lang => (
+                                    <option key={lang.code} value={lang.code}>
+                                        {lang.nativeLabel}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                    </div>
                 </div>
 
                 {/* Mystery Title - top, centered */}

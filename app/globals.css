@@ -136,6 +136,27 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+  gap: 16px;
+}
+
+.header-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.control-label {
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .lang-dropdown {
@@ -373,6 +394,16 @@ body {
 
   .mystery-title {
     font-size: 20px;
+  }
+
+  .rosary-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .header-controls {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .prayer-label {

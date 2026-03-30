@@ -1,5 +1,6 @@
 // Language configuration
 export type Language = 'en' | 'id';
+export type PrayerLanguage = Language | 'la';
 
 export interface LanguageOption {
     code: Language;
@@ -10,6 +11,18 @@ export interface LanguageOption {
 export const AVAILABLE_LANGUAGES: LanguageOption[] = [
     { code: 'en', label: 'English', nativeLabel: 'EN' },
     { code: 'id', label: 'Indonesian', nativeLabel: 'ID' },
+];
+
+export interface PrayerLanguageOption {
+    code: PrayerLanguage;
+    label: string;
+    nativeLabel: string;
+}
+
+export const AVAILABLE_PRAYER_LANGUAGES: PrayerLanguageOption[] = [
+    { code: 'en', label: 'English', nativeLabel: 'EN' },
+    { code: 'id', label: 'Indonesian', nativeLabel: 'ID' },
+    { code: 'la', label: 'Latin', nativeLabel: 'LA' },
 ];
 
 // Common Prayers - English (1:1 from Android app)
@@ -62,6 +75,30 @@ export const PRAYERS_ID = {
     rosaryPrayer: "Marilah berdoa. Ya Allah, yang Putra tunggal-Mu, dengan hidup, wafat dan kebangkitan-Nya, telah memperoleh bagi kami pahala kehidupan kekal, kami mohon, agar dengan merenungkan peristiwa-peristiwa Rosario Suci Santa Perawan Maria, kami dapat meneladan apa yang dikandungnya dan memperoleh apa yang dijanjikan-Nya. Demi Kristus, pengantara kami. Amin.",
 };
 
+export const PRAYERS_LA = {
+    signOfCross: "In nomine Patris, et Filii, et Spiritus Sancti. Amen.",
+
+    apostlesCreed: "Credo in Deum, Patrem omnipotentem, Creatorem caeli et terrae, et in Iesum Christum, Filium Eius unicum, Dominum nostrum, qui conceptus est de Spiritu Sancto, natus ex Maria Virgine, passus sub Pontio Pilato, crucifixus, mortuus, et sepultus; descendit ad inferos; tertia die resurrexit a mortuis; ascendit ad caelos, sedet ad dexteram Dei Patris omnipotentis; inde venturus est iudicare vivos et mortuos. Credo in Spiritum Sanctum, sanctam Ecclesiam catholicam, sanctorum communionem, remissionem peccatorum, carnis resurrectionem, vitam aeternam. Amen.",
+
+    ourFather: "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum cotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.",
+
+    hailMary: "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
+
+    hailMaryFaith: "Pro virtute fidei. Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
+
+    hailMaryHope: "Pro virtute spei. Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
+
+    hailMaryCharity: "Pro virtute caritatis. Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
+
+    gloryBe: "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in saecula saeculorum. Amen.",
+
+    fatimaPrayer: "Domine Iesu, dimitte nobis debita nostra, salva nos ab igne inferiori, perduc in caelum omnes animas, praesertim eas, quae misericordiae tuae maxime indigent.",
+
+    hailHolyQueen: "Salve, Regina, Mater misericordiae, vita, dulcedo, et spes nostra, salve. Ad te clamamus, exsules filii Evae. Ad te suspiramus, gementes et flentes in hac lacrimarum valle. Eia ergo, advocata nostra, illos tuos misericordes oculos ad nos converte. Et Iesum, benedictum fructum ventris tui, nobis post hoc exsilium ostende. O clemens, O pia, O dulcis Virgo Maria. Ora pro nobis, sancta Dei Genetrix, ut digni efficiamur promissionibus Christi.",
+
+    rosaryPrayer: "Oremus. Deus, cuius Unigenitus per vitam, mortem et resurrectionem suam nobis salutis aeternae praemia comparavit, concede, quaesumus, ut haec mysteria sacratissimo beatae Mariae Virginis Rosario recolentes, et imitemur quod continent, et quod promittunt assequamur. Per eundem Christum Dominum nostrum. Amen.",
+};
+
 // Prayer Titles - English
 export const PRAYER_TITLES_EN = {
     signOfCross: "Sign of the Cross",
@@ -92,14 +129,32 @@ export const PRAYER_TITLES_ID = {
     rosaryPrayer: "Doa Penutup Rosario",
 };
 
+export const PRAYER_TITLES_LA = {
+    signOfCross: "Signum Crucis",
+    apostlesCreed: "Symbolum Apostolorum",
+    ourFather: "Pater Noster",
+    hailMary: "Ave Maria",
+    hailMaryFaith: "Ave Maria (1/3)",
+    hailMaryHope: "Ave Maria (2/3)",
+    hailMaryCharity: "Ave Maria (3/3)",
+    gloryBe: "Gloria Patri",
+    fatimaPrayer: "Oratio Fatimae",
+    hailHolyQueen: "Salve Regina",
+    rosaryPrayer: "Oratio Rosarii",
+};
+
 // Get prayers by language
-export function getPrayers(lang: Language = 'en') {
-    return lang === 'id' ? PRAYERS_ID : PRAYERS_EN;
+export function getPrayers(lang: PrayerLanguage = 'en') {
+    if (lang === 'id') return PRAYERS_ID;
+    if (lang === 'la') return PRAYERS_LA;
+    return PRAYERS_EN;
 }
 
 // Get prayer titles by language
-export function getPrayerTitles(lang: Language = 'en') {
-    return lang === 'id' ? PRAYER_TITLES_ID : PRAYER_TITLES_EN;
+export function getPrayerTitles(lang: PrayerLanguage = 'en') {
+    if (lang === 'id') return PRAYER_TITLES_ID;
+    if (lang === 'la') return PRAYER_TITLES_LA;
+    return PRAYER_TITLES_EN;
 }
 
 // Backward compatibility - default to English
