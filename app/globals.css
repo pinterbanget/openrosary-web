@@ -75,6 +75,68 @@ body {
   color: var(--accent);
 }
 
+.latin-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  width: fit-content;
+  cursor: pointer;
+  user-select: none;
+}
+
+.latin-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.latin-toggle-track {
+  width: 42px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2px;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.latin-toggle-thumb {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #dbe9ef;
+  transition: transform 0.18s ease;
+}
+
+.latin-toggle input:checked + .latin-toggle-track {
+  background: rgba(0, 230, 168, 0.16);
+  border-color: rgba(0, 230, 168, 0.35);
+}
+
+.latin-toggle input:checked + .latin-toggle-track .latin-toggle-thumb {
+  transform: translateX(18px);
+  background: var(--accent);
+}
+
+.latin-toggle-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.latin-toggle-copy strong {
+  color: #dbe9ef;
+  font-size: 13px;
+  text-transform: lowercase;
+}
+
+.latin-toggle-copy span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
 /* Mysteries Grid - styled like socials nav */
 .mysteries-grid {
   display: flex;
@@ -386,6 +448,10 @@ body {
 
   .mysteries-grid {
     flex-direction: column;
+  }
+
+  .latin-toggle {
+    align-items: flex-start;
   }
 
   .mystery-btn {
