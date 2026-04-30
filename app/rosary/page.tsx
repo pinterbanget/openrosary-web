@@ -51,7 +51,7 @@ function RosaryContent() {
         if (nextLanguage !== 'en') {
             params.set('lang', nextLanguage);
         }
-        if (nextPrayerLanguage !== nextLanguage) {
+        if (nextPrayerLanguage === 'la') {
             params.set('prayers', nextPrayerLanguage);
         }
 
@@ -66,9 +66,7 @@ function RosaryContent() {
         }
 
         const lang = langParam === 'id' ? 'id' : 'en';
-        const prayerLang = prayerLangParam === 'la' || prayerLangParam === 'id' || prayerLangParam === 'en'
-            ? prayerLangParam
-            : lang;
+        const prayerLang = prayerLangParam === 'la' ? 'la' : lang;
         setLanguage(lang);
 
         const state = new RosaryState(mysteryParam, lang, prayerLang);
@@ -82,9 +80,11 @@ function RosaryContent() {
     const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         if (!rosaryState) return;
         const newLang = e.target.value as Language;
+        const nextPrayerLang = rosaryState.getPrayerLanguage() === 'la' ? 'la' : newLang;
         setLanguage(newLang);
         rosaryState.setLanguage(newLang);
-        syncQuery(newLang, rosaryState.getPrayerLanguage());
+        rosaryState.setPrayerLanguage(nextPrayerLang);
+        syncQuery(newLang, nextPrayerLang);
         updateUIFromState(rosaryState);
     };
 
