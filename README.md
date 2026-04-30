@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OpenRosary Web
 
-## Getting Started
+OpenRosary Web is a simple browser-based rosary tool built with Next.js.
 
-First, run the development server:
+The site lets you pick a set of mysteries, step through the rosary prayer by prayer, and read a Scripture passage for each decade. It is designed for phone use as well as desktop, with keyboard and swipe navigation.
+
+## What The Website Does
+
+- Choose from the Joyful, Luminous, Sorrowful, and Glorious mysteries.
+- Highlights a suggested mystery for today on the home screen.
+- Walk through the full rosary with progress tracking.
+- Shows the mystery title, prayer label, prayer text, and decade reading as you advance.
+- Supports English and Indonesian for readings and general UI.
+- Supports a home-screen toggle for Latin prayers while keeping the decade readings in the selected vernacular language.
+- Includes vibration feedback for navigation on supported devices.
+
+## Current Prayer And Reading Behavior
+
+- `EN` on the rosary page switches the mystery readings and interface to English.
+- `ID` switches the mystery readings and interface to Indonesian.
+- Turning on `latin prayers` from the home page changes the prayers and prayer labels to Latin.
+- Latin mode does not change the mystery readings; those stay in the selected reading language.
+
+## Navigation
+
+- Desktop:
+  Use the left/right or up/down arrow keys to move through the rosary.
+- Mobile:
+  Swipe left to advance and swipe right to go back.
+- The rosary page also shows progress out of `80` steps.
+
+## Project Structure
+
+- `app/page.tsx`
+  Home screen with mystery selection and the Latin prayers toggle.
+- `app/rosary/page.tsx`
+  Main rosary experience, reading-language selector, navigation, and completion modal.
+- `lib/prayers.ts`
+  Prayer texts, prayer titles, and mystery readings for English, Indonesian, and Latin prayers.
+- `lib/rosaryState.ts`
+  Rosary progression logic and current-step state.
+- `lib/vibration.ts`
+  Vibration helpers for supported devices.
+
+## Local Development
+
+Install dependencies and start the dev server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Verification
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+TypeScript can be checked with:
 
-## Learn More
+```bash
+npx tsc --noEmit
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Notes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- The app currently uses Google Fonts in `app/layout.tsx`.
+- In restricted or offline environments, `next build` can fail if those fonts cannot be fetched.
