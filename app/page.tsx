@@ -22,22 +22,6 @@ export default function Home() {
           <h1 className="site-title"><span className="accent">open</span>rosary</h1>
           <p className="tagline">a simple web-based rosary tool.</p>
 
-          <label className="latin-toggle" htmlFor="latin-prayers-toggle">
-            <input
-              id="latin-prayers-toggle"
-              type="checkbox"
-              checked={latinPrayers}
-              onChange={(e) => setLatinPrayers(e.target.checked)}
-            />
-            <span className="latin-toggle-track" aria-hidden="true">
-              <span className="latin-toggle-thumb" />
-            </span>
-            <span className="latin-toggle-copy">
-              <strong>latin prayers</strong>
-              <span>keep the mystery readings in your normal language</span>
-            </span>
-          </label>
-
           <nav className="mysteries-grid" aria-label="mystery selection">
             {mysteries.map((mystery) => (
               <Link
@@ -55,6 +39,22 @@ export default function Home() {
           </div>
 
           <div className="hint">navigate with arrow keys or swipe</div>
+
+          <label className="latin-toggle" htmlFor="latin-prayers-toggle">
+            <input
+              id="latin-prayers-toggle"
+              type="checkbox"
+              checked={latinPrayers}
+              onChange={(e) => setLatinPrayers(e.target.checked)}
+            />
+            <span className="latin-toggle-track" aria-hidden="true">
+              <span className="latin-toggle-thumb" />
+            </span>
+            <span className="latin-toggle-copy">
+              <strong>latin prayers</strong>
+              <span>keep the mystery readings in your normal language</span>
+            </span>
+          </label>
         </div>
       </div>
     </main>

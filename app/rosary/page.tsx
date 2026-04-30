@@ -185,23 +185,18 @@ function RosaryContent() {
                 {/* Header with back link and language dropdown */}
                 <div className="rosary-header">
                     <a href="/" className="back-link">← back</a>
-                    <div className="header-controls">
-                        <label className="control-group">
-                            <span className="control-label">{language === 'id' ? 'bacaan' : 'readings'}</span>
-                            <select
-                                value={language}
-                                onChange={handleLanguageChange}
-                                className="lang-dropdown"
-                                aria-label="Select reading language"
-                            >
-                                {AVAILABLE_LANGUAGES.map(lang => (
-                                    <option key={lang.code} value={lang.code}>
-                                        {lang.nativeLabel}
-                                    </option>
-                                ))}
-                            </select>
-                        </label>
-                    </div>
+                    <select
+                        value={language}
+                        onChange={handleLanguageChange}
+                        className="lang-dropdown"
+                        aria-label="Select reading language"
+                    >
+                        {AVAILABLE_LANGUAGES.map(lang => (
+                            <option key={lang.code} value={lang.code}>
+                                {lang.nativeLabel}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
                 {/* Mystery Title - top, centered */}
