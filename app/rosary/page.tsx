@@ -18,6 +18,7 @@ function RosaryContent() {
     const [prayerLabel, setPrayerLabel] = useState('');
     const [mysteryTitle, setMysteryTitle] = useState('');
     const [progress, setProgress] = useState(0);
+    const [maxProgress, setMaxProgress] = useState(80);
     const [showCompletion, setShowCompletion] = useState(false);
     const [language, setLanguage] = useState<Language>('en');
 
@@ -41,6 +42,7 @@ function RosaryContent() {
         }
 
         setProgress(state.getTotalCount());
+        setMaxProgress(state.getMaxCount());
     };
 
     const syncQuery = (nextLanguage: Language, nextPrayerLanguage: PrayerLanguage) => {
@@ -69,10 +71,19 @@ function RosaryContent() {
         const prayerLang = prayerLangParam === 'la' ? 'la' : lang;
         setLanguage(lang);
 
-        const state = new RosaryState(mysteryParam, lang, prayerLang);
-        // State starts at prayerCount=0 which is the first prayer - no need to advance
-        updateUIFromState(state);
-        setRosaryState(state);
+        setRosaryState((currentState) => {
+            if (currentState && currentState.getMysteryTypeKey() === mysteryParam) {
+                currentState.setLanguage(lang);
+                currentState.setPrayerLanguage(prayerLang);
+                updateUIFromState(currentState);
+                return currentState;
+            }
+
+            const state = new RosaryState(mysteryParam, lang, prayerLang);
+            // State starts at prayerCount=0 which is the first prayer - no need to advance
+            updateUIFromState(state);
+            return state;
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mysteryParam, langParam, prayerLangParam]);
 
@@ -215,10 +226,10 @@ function RosaryContent() {
                     <div className="progress-bar">
                         <div
                             className="progress-fill"
-                            style={{ width: `${(progress / 80) * 100}%` }}
+                            style={{ width: `${(progress / maxProgress) * 100}%` }}
                         />
                     </div>
-                    <span className="progress-text">{progress}/80</span>
+                    <span className="progress-text">{progress}/{maxProgress}</span>
                 </div>
 
                 {/* Instructions */}

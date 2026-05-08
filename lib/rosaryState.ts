@@ -28,9 +28,35 @@ export class RosaryState {
         this.complete = false;
     }
 
+    private usesIndonesianOpeningGloryBe(): boolean {
+        return this.language === 'id';
+    }
+
+    private getFirstPrayersMaxIndex(): number {
+        return this.usesIndonesianOpeningGloryBe() ? 5 : 4;
+    }
+
+    private getFirstPrayersLength(): number {
+        return this.getFirstPrayersMaxIndex() + 1;
+    }
+
+    getMysteryTypeKey(): MysteryType {
+        return this.mysteryType;
+    }
+
     // Set language
     setLanguage(lang: Language) {
+        const hadIndonesianOpeningGloryBe = this.usesIndonesianOpeningGloryBe();
         this.language = lang;
+        const hasIndonesianOpeningGloryBe = this.usesIndonesianOpeningGloryBe();
+
+        if (this.stage === STAGE_FIRST_PRAYERS && hadIndonesianOpeningGloryBe !== hasIndonesianOpeningGloryBe) {
+            if (hasIndonesianOpeningGloryBe) {
+                this.prayerCount++;
+            } else {
+                this.prayerCount = Math.max(0, this.prayerCount - 1);
+            }
+        }
     }
 
     getLanguage(): Language {
@@ -61,7 +87,7 @@ export class RosaryState {
                 break;
             case STAGE_FIRST_PRAYERS:
                 this.prayerCount++;
-                if (this.prayerCount > 4) {
+                if (this.prayerCount > this.getFirstPrayersMaxIndex()) {
                     this.stage = STAGE_DECADE;
                     this.prayerCount = 0;
                     this.mysteryIndex = 0;
@@ -119,7 +145,7 @@ export class RosaryState {
                         this.prayerCount = 13;
                     } else {
                         this.stage = STAGE_FIRST_PRAYERS;
-                        this.prayerCount = 4;
+                        this.prayerCount = this.getFirstPrayersMaxIndex();
                     }
                 }
                 break;
@@ -161,7 +187,7 @@ export class RosaryState {
                 if (currentPrayer === 1) return true;
             }
             // From Glory Be in first prayers to decade
-            else if (currentStage === STAGE_FIRST_PRAYERS && currentPrayer === 4) return true;
+            else if (currentStage === STAGE_FIRST_PRAYERS && currentPrayer === this.getFirstPrayersMaxIndex()) return true;
             // From Apostles' Creed to Our Father
             else if (currentStage === STAGE_INTRO && currentPrayer === 1) return true;
         } else {
@@ -192,6 +218,14 @@ export class RosaryState {
                 return PRAYERS.apostlesCreed;
 
             case STAGE_FIRST_PRAYERS:
+                if (this.usesIndonesianOpeningGloryBe()) {
+                    if (this.prayerCount === 0) return PRAYERS.gloryBe;
+                    if (this.prayerCount === 1) return PRAYERS.ourFather;
+                    if (this.prayerCount === 2) return PRAYERS.hailMaryFaith;
+                    if (this.prayerCount === 3) return PRAYERS.hailMaryHope;
+                    if (this.prayerCount === 4) return PRAYERS.hailMaryCharity;
+                    return PRAYERS.gloryBe;
+                }
                 if (this.prayerCount === 0) return PRAYERS.ourFather;
                 if (this.prayerCount === 1) return PRAYERS.hailMaryFaith;
                 if (this.prayerCount === 2) return PRAYERS.hailMaryHope;
@@ -236,6 +270,14 @@ export class RosaryState {
                 return PRAYER_TITLES.apostlesCreed;
 
             case STAGE_FIRST_PRAYERS:
+                if (this.usesIndonesianOpeningGloryBe()) {
+                    if (this.prayerCount === 0) return PRAYER_TITLES.gloryBe;
+                    if (this.prayerCount === 1) return PRAYER_TITLES.ourFather;
+                    if (this.prayerCount === 2) return PRAYER_TITLES.hailMaryFaith;
+                    if (this.prayerCount === 3) return PRAYER_TITLES.hailMaryHope;
+                    if (this.prayerCount === 4) return PRAYER_TITLES.hailMaryCharity;
+                    return PRAYER_TITLES.gloryBe;
+                }
                 if (this.prayerCount === 0) return PRAYER_TITLES.ourFather;
                 if (this.prayerCount === 1) return PRAYER_TITLES.hailMaryFaith;
                 if (this.prayerCount === 2) return PRAYER_TITLES.hailMaryHope;
@@ -288,7 +330,7 @@ export class RosaryState {
         if (this.stage === STAGE_FIRST_PRAYERS) {
             totalCount += this.prayerCount;
         } else if (this.stage > STAGE_FIRST_PRAYERS) {
-            totalCount += 5;
+            totalCount += this.getFirstPrayersLength();
         }
 
         if (this.stage === STAGE_DECADE) {
@@ -309,7 +351,7 @@ export class RosaryState {
 
     // Get max count (80)
     getMaxCount(): number {
-        return 80;
+        return 2 + this.getFirstPrayersLength() + (5 * 14) + 3;
     }
 
     // Check if complete
