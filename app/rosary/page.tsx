@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { RosaryState } from '@/lib/rosaryState';
+import { DevotionState, DEVOTION_TYPES, type DevotionType } from '@/lib/devotionState';
 import { singleVibrate, tripleVibrate, doubleVibrate } from '@/lib/vibration';
 import { AVAILABLE_LANGUAGES, type MysteryType, type Language, type PrayerLanguage } from '@/lib/prayers';
 
@@ -10,10 +11,11 @@ function RosaryContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const mysteryParam = searchParams.get('mystery') as MysteryType | null;
+    const devotionParam = searchParams.get('devotion') as DevotionType | null;
     const langParam = searchParams.get('lang') as Language | null;
     const prayerLangParam = searchParams.get('prayers') as PrayerLanguage | null;
 
-    const [rosaryState, setRosaryState] = useState<RosaryState | null>(null);
+    const [rosaryState, setRosaryState] = useState<RosaryState | DevotionState | null>(null);
     const [prayerText, setPrayerText] = useState('');
     const [prayerLabel, setPrayerLabel] = useState('');
     const [mysteryTitle, setMysteryTitle] = useState('');
@@ -26,18 +28,22 @@ function RosaryContent() {
     const touchEndX = useRef(0);
 
     // Update UI from current state
-    const updateUIFromState = (state: RosaryState) => {
+    const updateUIFromState = (state: RosaryState | DevotionState) => {
         setPrayerText(state.getCurrentPrayerText());
         setPrayerLabel(state.getCurrentPrayerLabel());
 
-        const currentMystery = state.getCurrentMysteryTitle();
-        if (currentMystery) {
-            setMysteryTitle(currentMystery);
+        if (state instanceof DevotionState) {
+            setMysteryTitle(state.getCurrentSection() || state.getDevotionName());
         } else {
-            if (state.getLanguage() === 'id') {
-                setMysteryTitle('Peristiwa ' + state.getMysteryType());
+            const currentMystery = state.getCurrentMysteryTitle();
+            if (currentMystery) {
+                setMysteryTitle(currentMystery);
             } else {
-                setMysteryTitle(state.getMysteryType() + ' Mysteries');
+                if (state.getLanguage() === 'id') {
+                    setMysteryTitle('Peristiwa ' + state.getMysteryType());
+                } else {
+                    setMysteryTitle(state.getMysteryType() + ' Mysteries');
+                }
             }
         }
 
@@ -46,10 +52,14 @@ function RosaryContent() {
     };
 
     const syncQuery = (nextLanguage: Language, nextPrayerLanguage: PrayerLanguage) => {
-        if (!mysteryParam) return;
+        if (!mysteryParam && !devotionParam) return;
 
         const params = new URLSearchParams();
-        params.set('mystery', mysteryParam);
+        if (devotionParam) {
+            params.set('devotion', devotionParam);
+        } else if (mysteryParam) {
+            params.set('mystery', mysteryParam);
+        }
         if (nextLanguage !== 'en') {
             params.set('lang', nextLanguage);
         }
@@ -62,7 +72,9 @@ function RosaryContent() {
 
     // Initialize rosary state
     useEffect(() => {
-        if (!mysteryParam || !['joyful', 'luminous', 'sorrowful', 'glorious'].includes(mysteryParam)) {
+        const isMystery = mysteryParam && ['joyful', 'luminous', 'sorrowful', 'glorious'].includes(mysteryParam);
+        const isDevotion = devotionParam && DEVOTION_TYPES.includes(devotionParam);
+        if (!isMystery && !isDevotion) {
             router.push('/');
             return;
         }
@@ -72,20 +84,27 @@ function RosaryContent() {
         setLanguage(lang);
 
         setRosaryState((currentState) => {
-            if (currentState && currentState.getMysteryTypeKey() === mysteryParam) {
+            const matchingState = currentState && (
+                currentState instanceof DevotionState
+                    ? currentState.getDevotionTypeKey() === devotionParam
+                    : currentState.getMysteryTypeKey() === mysteryParam
+            );
+            if (matchingState && currentState) {
                 currentState.setLanguage(lang);
                 currentState.setPrayerLanguage(prayerLang);
                 updateUIFromState(currentState);
                 return currentState;
             }
 
-            const state = new RosaryState(mysteryParam, lang, prayerLang);
+            const state = isDevotion
+                ? new DevotionState(devotionParam, lang, prayerLang)
+                : new RosaryState(mysteryParam as MysteryType, lang, prayerLang);
             // State starts at prayerCount=0 which is the first prayer - no need to advance
             updateUIFromState(state);
             return state;
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [mysteryParam, langParam, prayerLangParam]);
+    }, [mysteryParam, devotionParam, langParam, prayerLangParam]);
 
     // Handle language change from dropdown
     const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -247,8 +266,8 @@ function RosaryContent() {
                         <h3>{language === 'id' ? 'rosario selesai' : 'rosary complete'}</h3>
                         <p className="muted">
                             {language === 'id'
-                                ? `Anda telah menyelesaikan Peristiwa ${rosaryState.getMysteryType()} Rosario Suci. Tuhan memberkati Anda.`
-                                : `You have completed the ${rosaryState.getMysteryType()} mysteries of the Holy Rosary. God bless you.`}
+                                ? `Anda telah menyelesaikan ${rosaryState instanceof DevotionState ? rosaryState.getDevotionName() : `Peristiwa ${rosaryState.getMysteryType()} Rosario Suci`}. Tuhan memberkati Anda.`
+                                : `You have completed the ${rosaryState instanceof DevotionState ? rosaryState.getDevotionName() : `${rosaryState.getMysteryType()} mysteries of the Holy Rosary`}. God bless you.`}
                         </p>
                         <button onClick={() => router.push('/')}>
                             {language === 'id' ? 'kembali ke beranda' : 'return to home'}

@@ -32,6 +32,9 @@ export default function Home() {
                 {mystery.label}
               </Link>
             ))}
+            <Link href="/others" className="mystery-btn">
+              others
+            </Link>
           </nav>
 
           <div className="hint">
