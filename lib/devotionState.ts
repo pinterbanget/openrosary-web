@@ -119,7 +119,18 @@ export class DevotionState {
         if (this.devotionType === 'our-father-77') {
             return [
                 { label: titles.signOfCross, text: prayers.signOfCross },
+                { label: 'Permohonan', text: 'Tuhan, kasihanilah kami.' },
+                { label: 'Permohonan', text: 'Kristus, kasihanilah kami.' },
+                { label: 'Permohonan', text: 'Tuhan, kasihanilah kami.' },
+                { label: 'Permohonan', text: 'Kristus, dengarkanlah doa kami.' },
+                { label: 'Permohonan', text: 'Kristus, kabulkanlah doa kami.' },
+                {
+                    label: 'Permohonan Pribadi',
+                    text: 'Ya Bapa, hari ini kami menghadap kepada-Mu. Kabulkanlah permohonan kami.\n\n(Sebutkan permohonan Anda.)',
+                },
+                { label: titles.apostlesCreed, text: prayers.apostlesCreed },
                 ...repeat(titles.ourFather, prayers.ourFather, 77),
+                { label: titles.gloryBe, text: prayers.gloryBe },
                 { label: titles.signOfCross, text: prayers.signOfCross },
             ];
         }
