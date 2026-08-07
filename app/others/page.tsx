@@ -4,7 +4,7 @@ const devotions = [
   {
     type: 'our-father-77',
     title: '77x Bapa Kami',
-    detail: 'Sign of the Cross · 77x Our Father · Sign of the Cross',
+    detail: 'Tanda Salib · permohonan · Aku Percaya · 77x Bapa Kami · Kemuliaan · Tanda Salib',
     href: '/rosary?devotion=our-father-77&lang=id',
   },
   {
