@@ -163,6 +163,52 @@ body {
   box-shadow: 0 6px 18px rgba(0, 230, 168, 0.06);
 }
 
+.others-title {
+  color: var(--accent);
+  font-size: clamp(28px, 6vw, 52px);
+  margin: 24px 0 8px;
+  letter-spacing: -1px;
+}
+
+.devotion-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.devotion-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  color: #dbe9ef;
+  text-decoration: none;
+  background: var(--glass);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.devotion-btn:hover {
+  border-color: rgba(0, 230, 168, 0.28);
+  background: rgba(0, 230, 168, 0.04);
+}
+
+.devotion-btn strong {
+  color: var(--accent);
+  font-size: 16px;
+}
+
+.devotion-btn span,
+.devotion-btn small {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.devotion-btn small {
+  font-size: 11px;
+}
+
 /* Rosary Page - matching Android app layout */
 .rosary-page {
   min-height: 100vh;
