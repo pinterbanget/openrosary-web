@@ -19,7 +19,7 @@ export default function Home() {
     <main className="hero">
       <div className="container">
         <div className="hero-content">
-          <h1 className="site-title"><span className="accent">open</span>rosary</h1>
+          <h1 className="site-title">(openrosary)</h1>
           <p className="tagline">a simple web-based rosary tool.</p>
 
           <nav className="mysteries-grid" aria-label="mystery selection">

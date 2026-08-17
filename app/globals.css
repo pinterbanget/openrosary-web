@@ -430,6 +430,66 @@ body {
   .modal { background: var(--panel); }
 }
 
+/* OpenRosary keeps its controls familiar, but uses the shared readable scale. */
+:root[data-theme='dark'] {
+  --bg: #08111f;
+  --panel: #101b2e;
+  --muted: #b5c2d4;
+  --accent: #9dceff;
+  --glass: rgba(255, 255, 255, 0.03);
+  --text: #f6f8fc;
+}
+
+:root[data-theme='light'] {
+  --bg: #f5f8fc;
+  --panel: #ffffff;
+  --muted: #52657d;
+  --accent: #1769b0;
+  --glass: rgba(23, 105, 176, 0.1);
+  --text: #10233b;
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 18px;
+  right: 20px;
+  z-index: 20;
+  border: 1px solid var(--glass);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--muted);
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+.site-title::after { content: none; }
+.tagline { font-size: 20px; }
+.hint { font-size: 15px; }
+.mystery-btn { font-size: 16px; }
+.latin-toggle-copy strong { font-size: 14px; }
+.latin-toggle-copy span { font-size: 13px; }
+.others-title { font-size: clamp(31px, 6vw, 56px); }
+.devotion-btn strong { font-size: 18px; }
+.devotion-btn span { font-size: 16px; }
+.back-link, .lang-dropdown { font-size: 14px; }
+.mystery-title { font-size: 27px; }
+.prayer-label { font-size: 22px; }
+.prayer-text { font-size: 18px; line-height: 1.7; }
+.progress-text { font-size: 14px; }
+.instructions { font-size: 14px; }
+
+@media (max-width: 640px) {
+  .theme-toggle { top: 14px; right: 14px; }
+  .tagline { font-size: 18px; }
+  .hint, .mystery-btn { font-size: 15px; }
+  .mystery-title { font-size: 23px; }
+  .prayer-label { font-size: 18px; }
+  .prayer-text { font-size: 16px; }
+}
+
 /* Loading */
 .loading {
   min-height: 100vh;
