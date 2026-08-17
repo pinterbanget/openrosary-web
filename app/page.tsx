@@ -1,12 +1,21 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getSuggestedMysteryForToday, type MysteryType } from '@/lib/prayers';
 
 export default function Home() {
   const [latinPrayers, setLatinPrayers] = useState(false);
   const suggestedMystery = getSuggestedMysteryForToday();
+
+  useEffect(() => {
+    setLatinPrayers(window.localStorage.getItem('openrosary-latin-prayers') === 'true');
+  }, []);
+
+  const setLatinPreference = (enabled: boolean) => {
+    setLatinPrayers(enabled);
+    window.localStorage.setItem('openrosary-latin-prayers', String(enabled));
+  };
 
   const mysteries: { type: MysteryType; label: string }[] = [
     { type: 'joyful', label: 'joyful' },
@@ -48,15 +57,12 @@ export default function Home() {
               id="latin-prayers-toggle"
               type="checkbox"
               checked={latinPrayers}
-              onChange={(e) => setLatinPrayers(e.target.checked)}
+              onChange={(e) => setLatinPreference(e.target.checked)}
             />
             <span className="latin-toggle-track" aria-hidden="true">
               <span className="latin-toggle-thumb" />
             </span>
-            <span className="latin-toggle-copy">
-              <strong>latin prayers</strong>
-              <span>keep the mystery readings in your normal language</span>
-            </span>
+            <span className="latin-toggle-copy">latin prayers</span>
           </label>
         </div>
       </div>
