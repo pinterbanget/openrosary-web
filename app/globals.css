@@ -602,3 +602,18 @@ body {
     font-size: 14px;
   }
 }
+
+/* Mobile overrides belong last: they must win over the legacy compact scale. */
+@media (max-width: 640px) {
+  .hero .latin-toggle {
+    top: 54px;
+    right: 14px;
+    align-items: center;
+  }
+
+  .site-title { font-size: 46px; }
+  .mystery-title { font-size: 23px; }
+  .prayer-label { font-size: 19px; }
+  .prayer-text { font-size: 17px; line-height: 1.7; }
+  .progress-text, .instructions { font-size: 14px; }
+}

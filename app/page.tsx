@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { getSuggestedMysteryForToday, type MysteryType } from '@/lib/prayers';
+import ThemeToggle from './ThemeToggle';
 
 export default function Home() {
   const [latinPrayers, setLatinPrayers] = useState(false);
@@ -26,6 +27,7 @@ export default function Home() {
 
   return (
     <main className="hero">
+      <ThemeToggle />
       <div className="container">
         <div className="hero-content">
           <h1 className="site-title">(openrosary)</h1>
