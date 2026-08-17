@@ -236,11 +236,9 @@ export class RosaryState {
                 if (this.prayerCount === 0) {
                     const mysteries = getMysteries(this.mysteryType, this.language);
                     const mystery = mysteries[Math.min(this.mysteryIndex, 4)];
-                    if (this.language === 'id') {
-                        return `Peristiwa ${this.getMysteryType()} #${this.decadeCount}: ${mystery.title}\n\n${mystery.description}`;
-                    } else {
-                        return `${this.getMysteryType()} Mystery #${this.decadeCount}: ${mystery.title}\n\n${mystery.description}`;
-                    }
+                    // The page already shows the mystery and decade as its heading.
+                    // Keep the reading pane focused on the scripture itself.
+                    return mystery.description;
                 }
                 if (this.prayerCount === 1) return PRAYERS.ourFather;
                 if (this.prayerCount >= 2 && this.prayerCount <= 11) return PRAYERS.hailMary;
