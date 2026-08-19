@@ -2,70 +2,84 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { getSuggestedMysteryForToday, type MysteryType } from '@/lib/prayers';
+import { getSuggestedMysteryForToday, type Language, type MysteryType } from '@/lib/prayers';
 import ThemeToggle from './ThemeToggle';
+import LanguageMenu from './LanguageMenu';
 
 export default function Home() {
   const [latinPrayers, setLatinPrayers] = useState(false);
+  const [language, setLanguage] = useState<Language>('en');
   const suggestedMystery = getSuggestedMysteryForToday();
 
   useEffect(() => {
     setLatinPrayers(window.localStorage.getItem('openrosary-latin-prayers') === 'true');
+    const savedLanguage = window.localStorage.getItem('openrosary-language');
+    if (savedLanguage === 'id') setLanguage('id');
   }, []);
+
+  useEffect(() => { document.documentElement.lang = language; }, [language]);
 
   const setLatinPreference = (enabled: boolean) => {
     setLatinPrayers(enabled);
     window.localStorage.setItem('openrosary-latin-prayers', String(enabled));
   };
 
-  const mysteries: { type: MysteryType; label: string }[] = [
-    { type: 'joyful', label: 'joyful' },
-    { type: 'luminous', label: 'luminous' },
-    { type: 'sorrowful', label: 'sorrowful' },
-    { type: 'glorious', label: 'glorious' },
+  const setLanguagePreference = (nextLanguage: Language) => {
+    setLanguage(nextLanguage);
+    window.localStorage.setItem('openrosary-language', nextLanguage);
+  };
+
+  const mysteries: { type: MysteryType; label: string; labelId: string }[] = [
+    { type: 'joyful', label: 'joyful', labelId: 'gembira' },
+    { type: 'luminous', label: 'luminous', labelId: 'terang' },
+    { type: 'sorrowful', label: 'sorrowful', labelId: 'sedih' },
+    { type: 'glorious', label: 'glorious', labelId: 'mulia' },
   ];
+
+  const rosaryHref = (mystery: MysteryType) => {
+    const params = new URLSearchParams({ mystery });
+    if (language === 'id') params.set('lang', 'id');
+    if (latinPrayers) params.set('prayers', 'la');
+    return `/rosary?${params.toString()}`;
+  };
+
+  const othersHref = () => {
+    const params = new URLSearchParams();
+    if (language === 'id') params.set('lang', 'id');
+    if (latinPrayers) params.set('prayers', 'la');
+    const query = params.toString();
+    return query ? `/others?${query}` : '/others';
+  };
 
   return (
     <main className="hero">
       <ThemeToggle />
+      <LanguageMenu language={language} latinPrayers={latinPrayers} onLanguageChange={setLanguagePreference} onLatinPrayersChange={setLatinPreference} />
       <div className="container">
         <div className="hero-content">
           <h1 className="site-title">(openrosary)</h1>
-          <p className="tagline">a simple web-based rosary tool.</p>
+          <p className="tagline">{language === 'id' ? 'alat doa rosario sederhana berbasis web.' : 'a simple web-based rosary tool.'}</p>
 
           <nav className="mysteries-grid" aria-label="mystery selection">
             {mysteries.map((mystery) => (
               <Link
                 key={mystery.type}
-                href={latinPrayers ? `/rosary?mystery=${mystery.type}&prayers=la` : `/rosary?mystery=${mystery.type}`}
+                href={rosaryHref(mystery.type)}
                 className={`mystery-btn ${mystery.type === suggestedMystery ? 'suggested' : ''}`}
               >
-                {mystery.label}
+                {language === 'id' ? mystery.labelId : mystery.label}
               </Link>
             ))}
-            <Link href="/others" className="mystery-btn">
-              others
+            <Link href={othersHref()} className="mystery-btn">
+              {language === 'id' ? 'doa lainnya' : 'others'}
             </Link>
           </nav>
 
           <div className="hint">
-            today's suggestion: <span className="accent">{suggestedMystery}</span>
+            {language === 'id' ? 'saran hari ini: ' : "today's suggestion: "}<span className="accent">{language === 'id' ? mysteries.find((mystery) => mystery.type === suggestedMystery)?.labelId : suggestedMystery}</span>
           </div>
 
-          <div className="hint">navigate with arrow keys or swipe</div>
-
-          <label className="latin-toggle" htmlFor="latin-prayers-toggle">
-            <input
-              id="latin-prayers-toggle"
-              type="checkbox"
-              checked={latinPrayers}
-              onChange={(e) => setLatinPreference(e.target.checked)}
-            />
-            <span className="latin-toggle-track" aria-hidden="true">
-              <span className="latin-toggle-thumb" />
-            </span>
-            <span className="latin-toggle-copy">latin prayers</span>
-          </label>
+          <div className="hint">{language === 'id' ? 'navigasi dengan tombol panah atau geser' : 'navigate with arrow keys or swipe'}</div>
         </div>
       </div>
     </main>

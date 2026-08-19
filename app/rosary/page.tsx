@@ -214,7 +214,7 @@ function RosaryContent() {
             <div className="rosary-container">
                 {/* Header with back link and language dropdown */}
                 <div className="rosary-header">
-                    <a href="/" className="back-link">← back</a>
+                    <a href={language === 'id' ? '/?lang=id' : '/'} className="back-link">← {language === 'id' ? 'kembali' : 'back'}</a>
                     <select
                         value={language}
                         onChange={handleLanguageChange}
@@ -245,7 +245,7 @@ function RosaryContent() {
                     <div className="progress-bar">
                         <div
                             className="progress-fill"
-                            style={{ width: `${(progress / maxProgress) * 100}%` }}
+                            style={{ transform: `scaleX(${progress / maxProgress})` }}
                         />
                     </div>
                     <span className="progress-text">{progress}/{maxProgress}</span>

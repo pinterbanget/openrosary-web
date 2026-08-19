@@ -74,67 +74,6 @@ body {
   color: var(--accent);
 }
 
-.latin-toggle {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 16px;
-  width: fit-content;
-  cursor: pointer;
-  user-select: none;
-}
-
-.latin-toggle input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.latin-toggle-track {
-  width: 42px;
-  height: 24px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 2px;
-  transition: background 0.18s ease, border-color 0.18s ease;
-}
-
-.latin-toggle-thumb {
-  display: block;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--text);
-  transition: transform 0.18s ease;
-}
-
-.latin-toggle input:checked + .latin-toggle-track {
-  background: rgba(157, 206, 255, 0.16);
-  border-color: rgba(157, 206, 255, 0.35);
-}
-
-.latin-toggle input:checked + .latin-toggle-track .latin-toggle-thumb {
-  transform: translateX(18px);
-  background: var(--accent);
-}
-
-.latin-toggle-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.latin-toggle-copy strong {
-  color: var(--text);
-  font-size: 13px;
-  text-transform: lowercase;
-}
-
-.latin-toggle-copy span {
-  color: var(--muted);
-  font-size: 12px;
-}
 
 /* Mysteries Grid - styled like socials nav */
 .mysteries-grid {
@@ -336,9 +275,11 @@ body {
 }
 
 .progress-fill {
+  width: 100%;
   height: 100%;
   background: var(--accent);
-  transition: width 0.3s ease;
+  transform-origin: left center;
+  transition: transform 0.3s ease;
 }
 
 .progress-text {
@@ -421,34 +362,43 @@ body {
   box-shadow: 0 8px 24px rgba(65, 134, 205, 0.15);
 }
 
-/* Keep the prayer-language choice beside the colour control, and remember it. */
-.hero .latin-toggle {
+/* Compact language control sits below the colour switch and never overlaps the title. */
+.language-menu {
   position: fixed;
-  top: 64px;
+  top: 62px;
   right: 20px;
   z-index: 20;
-  gap: 8px;
-  margin: 0;
-  padding: 7px 10px;
+}
+.language-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
   border: 1px solid var(--glass);
   border-radius: 999px;
   background: var(--panel);
-}
-
-.hero .latin-toggle:hover { border-color: var(--accent); }
-.hero .latin-toggle-track { width: 34px; height: 20px; }
-.hero .latin-toggle-thumb { width: 14px; height: 14px; }
-.hero .latin-toggle input:checked + .latin-toggle-track .latin-toggle-thumb { transform: translateX(14px); }
-.hero .latin-toggle-copy {
-  display: block;
   color: var(--muted);
+  padding: 7px 10px;
+  font: inherit;
   font-size: 14px;
   line-height: 1;
-  white-space: nowrap;
+  cursor: pointer;
 }
+.language-menu-trigger:hover, .language-menu-trigger[aria-expanded='true'] { color: var(--accent); border-color: var(--accent); }
+.language-menu-trigger svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
+.language-menu-panel { display: grid; gap: 10px; width: 188px; margin-top: 8px; padding: 10px; border: 1px solid var(--glass); border-radius: 12px; background: var(--panel); box-shadow: 0 16px 36px rgba(1, 8, 20, .2); }
+.language-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.language-choices button { min-height: 36px; border: 1px solid var(--glass); border-radius: 8px; background: transparent; color: var(--muted); font: inherit; font-size: 13px; cursor: pointer; }
+.language-choices button[aria-pressed='true'] { border-color: var(--accent); background: rgba(157, 206, 255, .12); color: var(--accent); }
+.language-latin-option { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid var(--glass); padding-top: 10px; color: var(--muted); font-size: 13px; cursor: pointer; }
+.language-latin-option input { position: absolute; opacity: 0; pointer-events: none; }
+.language-latin-switch { width: 34px; height: 20px; padding: 2px; border: 1px solid var(--glass); border-radius: 999px; background: rgba(255, 255, 255, .08); transition: background .18s ease, border-color .18s ease; }
+.language-latin-switch span { display: block; width: 14px; height: 14px; border-radius: 50%; background: var(--text); transition: transform .18s ease, background .18s ease; }
+.language-latin-option input:checked + .language-latin-switch { border-color: var(--accent); background: rgba(157, 206, 255, .16); }
+.language-latin-option input:checked + .language-latin-switch span { transform: translateX(14px); background: var(--accent); }
 
 @media (max-width: 640px) {
-  .hero .latin-toggle { top: 54px; right: 14px; }
+  .language-menu { top: 58px; right: 14px; }
 }
 
 ::selection { background: var(--accent); color: #08111f; }
@@ -494,13 +444,17 @@ body {
   cursor: pointer;
 }
 
+body, .theme-toggle, .language-menu-trigger, .language-menu-panel, .language-choices button, .language-latin-switch, .lang-dropdown, .prayer-container, .modal { transition: background-color .25s ease, color .25s ease, border-color .25s ease; }
+::view-transition-old(root) { animation: none; }
+::view-transition-new(root) { animation: openrosary-theme-reveal .45s cubic-bezier(.16, 1, .3, 1) both; }
+@keyframes openrosary-theme-reveal { from { clip-path: circle(0 at calc(100% - 42px) 32px); } to { clip-path: circle(150% at calc(100% - 42px) 32px); } }
+@media (prefers-reduced-motion: reduce) { body, .theme-toggle, .language-menu-trigger, .language-menu-panel, .language-choices button, .language-latin-switch, .lang-dropdown, .prayer-container, .modal { transition: none; } ::view-transition-old(root), ::view-transition-new(root) { animation: none; } }
+
 .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
 .site-title::after { content: none; }
 .tagline { font-size: 20px; }
 .hint { font-size: 15px; }
 .mystery-btn { font-size: 16px; }
-.latin-toggle-copy strong { font-size: 14px; }
-.latin-toggle-copy span { font-size: 13px; }
 .others-title { font-size: clamp(31px, 6vw, 56px); }
 .devotion-btn strong { font-size: 18px; }
 .devotion-btn span { font-size: 16px; }
@@ -605,12 +559,6 @@ body {
 
 /* Mobile overrides belong last: they must win over the legacy compact scale. */
 @media (max-width: 640px) {
-  .hero .latin-toggle {
-    top: 54px;
-    right: 14px;
-    align-items: center;
-  }
-
   .site-title { font-size: 46px; }
   .mystery-title { font-size: 23px; }
   .prayer-label { font-size: 19px; }

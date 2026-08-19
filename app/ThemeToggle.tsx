@@ -16,7 +16,11 @@ export default function ThemeToggle() {
 
   const toggleTheme = () => {
     const next: Theme = theme === 'light' ? 'dark' : 'light';
-    document.documentElement.dataset.theme = next;
+    const applyTheme = () => { document.documentElement.dataset.theme = next; };
+    const transitionDocument = document as Document & { startViewTransition?: (callback: () => void) => void };
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) applyTheme();
+    else if (transitionDocument.startViewTransition) transitionDocument.startViewTransition(applyTheme);
+    else applyTheme();
     window.localStorage.setItem('openrosary-theme', next);
     setTheme(next);
   };
