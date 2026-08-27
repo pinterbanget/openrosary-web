@@ -387,9 +387,10 @@ body {
 .language-menu-trigger:hover, .language-menu-trigger[aria-expanded='true'] { color: var(--accent); border-color: var(--accent); }
 .language-menu-trigger svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
 .language-menu-panel { display: grid; gap: 10px; width: 188px; margin-top: 8px; padding: 10px; border: 1px solid var(--glass); border-radius: 12px; background: var(--panel); box-shadow: 0 16px 36px rgba(1, 8, 20, .2); }
-.language-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.language-choices button { min-height: 36px; border: 1px solid var(--glass); border-radius: 8px; background: transparent; color: var(--muted); font: inherit; font-size: 13px; cursor: pointer; }
-.language-choices button[aria-pressed='true'] { border-color: var(--accent); background: rgba(157, 206, 255, .12); color: var(--accent); }
+.language-select-wrapper { display: flex; }
+.language-select { width: 100%; border: 1px solid var(--glass); border-radius: 8px; background: transparent; color: var(--muted); font: inherit; font-size: 13px; padding: 6px 10px; cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239aa6b2' d='M6 8L2 4h8z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; padding-right: 28px; transition: border-color .18s ease, color .18s ease; }
+.language-select:hover, .language-select:focus { border-color: var(--accent); color: var(--accent); outline: none; }
+.language-select option { background: var(--panel); color: var(--text); }
 .language-latin-option { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid var(--glass); padding-top: 10px; color: var(--muted); font-size: 13px; cursor: pointer; }
 .language-latin-option input { position: absolute; opacity: 0; pointer-events: none; }
 .language-latin-switch { width: 34px; height: 20px; padding: 2px; border: 1px solid var(--glass); border-radius: 999px; background: rgba(255, 255, 255, .08); transition: background .18s ease, border-color .18s ease; }
@@ -449,6 +450,24 @@ body, .theme-toggle, .language-menu-trigger, .language-menu-panel, .language-cho
 ::view-transition-new(root) { animation: openrosary-theme-reveal .45s cubic-bezier(.16, 1, .3, 1) both; }
 @keyframes openrosary-theme-reveal { from { clip-path: circle(0 at calc(100% - 42px) 32px); } to { clip-path: circle(150% at calc(100% - 42px) 32px); } }
 @media (prefers-reduced-motion: reduce) { body, .theme-toggle, .language-menu-trigger, .language-menu-panel, .language-choices button, .language-latin-switch, .lang-dropdown, .prayer-container, .modal { transition: none; } ::view-transition-old(root), ::view-transition-new(root) { animation: none; } }
+
+/* Language toggle animation */
+.lang-animate {
+  animation: lang-fade-in 0.35s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+@keyframes lang-fade-in {
+  from {
+    opacity: 0.0;
+    transform: translateY(8px) scale(0.98);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
 
 .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
 .site-title::after { content: none; }

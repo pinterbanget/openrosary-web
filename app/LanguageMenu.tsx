@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import type { Language } from '@/lib/prayers';
+import { AVAILABLE_LANGUAGES, type Language } from '@/lib/prayers';
 
 type LanguageMenuProps = {
   language: Language;
@@ -44,9 +44,19 @@ export default function LanguageMenu({ language, latinPrayers, onLanguageChange,
       </button>
       {open && (
         <div className="language-menu-panel" id="language-menu-panel">
-          <div className="language-choices" role="group" aria-label="Display language">
-            <button type="button" aria-pressed={language === 'en'} onClick={() => onLanguageChange('en')}>EN</button>
-            <button type="button" aria-pressed={language === 'id'} onClick={() => onLanguageChange('id')}>ID</button>
+          <div className="language-select-wrapper">
+            <select
+              value={language}
+              onChange={(e) => onLanguageChange(e.target.value as Language)}
+              className="language-select"
+              aria-label="Display language"
+            >
+              {AVAILABLE_LANGUAGES.map(lang => (
+                <option key={lang.code} value={lang.code}>
+                  {lang.nativeLabel} — {lang.label}
+                </option>
+              ))}
+            </select>
           </div>
           <label className="language-latin-option">
             <span>{language === 'id' ? 'doa Latin' : 'latin prayers'}</span>
