@@ -15,12 +15,12 @@ function OthersContent() {
     return `/rosary?${params.toString()}`;
   };
   const devotions = language === 'id' ? [
-    { type: 'our-father-77', title: '77x Bapa Kami', detail: '77 kali Bapa Kami untuk ujud pribadi' },
+    { type: 'our-father-77', title: '77× Bapa Kami', detail: '77 kali Bapa Kami untuk ujud pribadi' },
     { type: 'divine-mercy', title: 'Koronka Kerahiman Ilahi', detail: 'Lima dekade dengan butir rosario biasa' },
     { type: 'seven-sorrows', title: 'Rosario Tujuh Dukacita', detail: 'Tujuh dukacita · satu Bapa Kami dan tujuh Salam Maria setiap peristiwa' },
     { type: 'franciscan-crown', title: 'Mahkota Fransiskan', detail: 'Tujuh sukacita Maria · tujuh dekade' },
   ] : [
-    { type: 'our-father-77', title: '77x Our Father', detail: '77 Our Fathers for personal intentions' },
+    { type: 'our-father-77', title: '77× Our Father', detail: '77 Our Fathers for personal intentions' },
     { type: 'divine-mercy', title: 'Divine Mercy Chaplet', detail: 'Five decades on the usual rosary beads' },
     { type: 'seven-sorrows', title: 'Seven Sorrows Rosary', detail: 'Seven sorrows · one Our Father and seven Hail Marys each' },
     { type: 'franciscan-crown', title: 'Franciscan Crown', detail: 'Seven joys of Mary · seven decades' },

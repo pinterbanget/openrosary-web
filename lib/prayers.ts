@@ -75,26 +75,31 @@ export const PRAYERS_ID = {
     rosaryPrayer: "Marilah berdoa. Ya Allah, yang Putra tunggal-Mu, dengan hidup, wafat dan kebangkitan-Nya, telah memperoleh bagi kami pahala kehidupan kekal, kami mohon, agar dengan merenungkan peristiwa-peristiwa Rosario Suci Santa Perawan Maria, kami dapat meneladan apa yang dikandungnya dan memperoleh apa yang dijanjikan-Nya. Demi Kristus, pengantara kami. Amin.",
 };
 
+// Latin prayers follow the traditional forms (cf. EWTN's Latin Prayers of the
+// Rosary, preces-latinae Rosarium, St. Mary's Latin Rosary card):
+// quotidianum, Hevae, O mi Iesu / libera nos ab igne inferni Fatima,
+// "Pro augmento fidei/spei/caritatis" intros, merged V/R versicle. Kept in
+// sync with Android values/prayers.xml + values-in/prayers.xml Latin strings.
 export const PRAYERS_LA = {
     signOfCross: "In nomine Patris, et Filii, et Spiritus Sancti. Amen.",
 
-    apostlesCreed: "Credo in Deum, Patrem omnipotentem, Creatorem caeli et terrae, et in Iesum Christum, Filium Eius unicum, Dominum nostrum, qui conceptus est de Spiritu Sancto, natus ex Maria Virgine, passus sub Pontio Pilato, crucifixus, mortuus, et sepultus; descendit ad inferos; tertia die resurrexit a mortuis; ascendit ad caelos, sedet ad dexteram Dei Patris omnipotentis; inde venturus est iudicare vivos et mortuos. Credo in Spiritum Sanctum, sanctam Ecclesiam catholicam, sanctorum communionem, remissionem peccatorum, carnis resurrectionem, vitam aeternam. Amen.",
+    apostlesCreed: "Credo in Deum, Patrem omnipotentem, Creatorem caeli et terrae. Et in Iesum Christum, Filium Eius unicum, Dominum nostrum, qui conceptus est de Spiritu Sancto, natus ex Maria Virgine, passus sub Pontio Pilato, crucifixus, mortuus, et sepultus, descendit ad inferos, tertia die resurrexit a mortuis, ascendit ad caelos, sedet ad dexteram Dei Patris omnipotentis, inde venturus est iudicare vivos et mortuos. Credo in Spiritum Sanctum, sanctam Ecclesiam catholicam, sanctorum communionem, remissionem peccatorum, carnis resurrectionem, vitam aeternam. Amen.",
 
-    ourFather: "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum cotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.",
+    ourFather: "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.",
 
-    hailMary: "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
+    hailMary: "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc, et in hora mortis nostrae. Amen.",
 
-    hailMaryFaith: "Pro virtute fidei. Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
+    hailMaryFaith: "Pro augmento fidei. Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc, et in hora mortis nostrae. Amen.",
 
-    hailMaryHope: "Pro virtute spei. Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
+    hailMaryHope: "Pro augmento spei. Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc, et in hora mortis nostrae. Amen.",
 
-    hailMaryCharity: "Pro virtute caritatis. Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
+    hailMaryCharity: "Pro augmento caritatis. Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc, et in hora mortis nostrae. Amen.",
 
     gloryBe: "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in saecula saeculorum. Amen.",
 
-    fatimaPrayer: "Domine Iesu, dimitte nobis debita nostra, salva nos ab igne inferiori, perduc in caelum omnes animas, praesertim eas, quae misericordiae tuae maxime indigent.",
+    fatimaPrayer: "O mi Iesu, dimitte nobis debita nostra, libera nos ab igne inferni, perduc in caelum omnes animas, praesertim eas quae misericordiae tuae maxime indigent. Amen.",
 
-    hailHolyQueen: "Salve, Regina, Mater misericordiae, vita, dulcedo, et spes nostra, salve. Ad te clamamus, exsules filii Evae. Ad te suspiramus, gementes et flentes in hac lacrimarum valle. Eia ergo, advocata nostra, illos tuos misericordes oculos ad nos converte. Et Iesum, benedictum fructum ventris tui, nobis post hoc exsilium ostende. O clemens, O pia, O dulcis Virgo Maria. Ora pro nobis, sancta Dei Genetrix, ut digni efficiamur promissionibus Christi.",
+    hailHolyQueen: "Salve, Regina, Mater misericordiae, vita, dulcedo, et spes nostra, salve. Ad te clamamus, exsules filii Hevae. Ad te suspiramus, gementes et flentes in hac lacrimarum valle. Eia ergo, advocata nostra, illos tuos misericordes oculos ad nos converte. Et Iesum, benedictum fructum ventris tui, nobis post hoc exsilium ostende. O clemens, O pia, O dulcis Virgo Maria. Ora pro nobis, sancta Dei Genetrix, ut digni efficiamur promissionibus Christi.",
 
     rosaryPrayer: "Oremus. Deus, cuius Unigenitus per vitam, mortem et resurrectionem suam nobis salutis aeternae praemia comparavit, concede, quaesumus, ut haec mysteria sacratissimo beatae Mariae Virginis Rosario recolentes, et imitemur quod continent, et quod promittunt assequamur. Per eundem Christum Dominum nostrum. Amen.",
 };
@@ -384,11 +389,17 @@ export function getMysteryTypeName(type: MysteryType, lang: Language = 'en'): st
     return type.charAt(0).toUpperCase() + type.slice(1);
 }
 
-// Get suggested mystery for today based on day of week
-export function getSuggestedMysteryForToday(): MysteryType {
-    const day = new Date().getDay();
+// Get suggested mystery for today based on day of week (1:1 from Android RosaryPrayers.getSuggestedMysteryForToday)
+export function getSuggestedMysteryForToday(date: Date = new Date()): MysteryType {
+    const day = date.getDay();
     switch (day) {
-        case 0: return 'glorious';   // Sunday
+        case 0: {
+            // Sunday: Advent/Christmas -> joyful, Lent (approx Feb/Mar) -> sorrowful, else glorious
+            const month = date.getMonth(); // 0-11
+            if (month === 11 || month === 0) return 'joyful';
+            if (month === 1 || month === 2) return 'sorrowful';
+            return 'glorious';
+        }
         case 1: return 'joyful';     // Monday
         case 2: return 'sorrowful';  // Tuesday
         case 3: return 'glorious';   // Wednesday

@@ -1,4 +1,4 @@
-import { getPrayers, getPrayerTitles, type Language, type PrayerLanguage } from './prayers';
+import { getPrayers, type Language, type PrayerLanguage } from './prayers';
 
 export type DevotionType = 'our-father-77' | 'divine-mercy' | 'seven-sorrows' | 'franciscan-crown';
 
@@ -10,13 +10,17 @@ interface DevotionStep {
     section?: string;
 }
 
+// 1:1 from Android app/src/main/assets/devotions/en + in Markdown files.
+// Labels/sections/literal texts below mirror DevotionParser output exactly
+// (macros like @OurFather resolve at runtime via prayerLanguage, same as Android).
+
 const SEVEN_SORROWS_EN = [
     ['The Prophecy of Simeon', 'Luke 2:34–35'],
     ['The Flight into Egypt', 'Matthew 2:13–15'],
     ['The Loss of Jesus in the Temple', 'Luke 2:41–52'],
     ['Mary Meets Jesus on the Way to Calvary', 'Luke 23:26–31'],
     ['The Crucifixion and Death of Jesus', 'John 19:25–30'],
-    ['Mary Receives Jesus’ Body', 'John 19:38–40'],
+    ["Mary Receives Jesus' Body", 'John 19:38–40'],
     ['Jesus Is Laid in the Tomb', 'John 19:41–42'],
 ] as const;
 
@@ -50,16 +54,17 @@ const SEVEN_JOYS_ID = [
     ['Maria Diangkat ke Surga', 'Wahyu 12:1'],
 ] as const;
 
+// 1:1 from Android strings.xml devotion_*_title
 function devotionName(type: DevotionType, language: Language): string {
     const names = language === 'id'
         ? {
-            'our-father-77': '77x Bapa Kami',
+            'our-father-77': '77× Bapa Kami',
             'divine-mercy': 'Koronka Kerahiman Ilahi',
-            'seven-sorrows': 'Rosario Tujuh Dukacita Maria',
+            'seven-sorrows': 'Rosario Tujuh Dukacita',
             'franciscan-crown': 'Mahkota Fransiskan',
         }
         : {
-            'our-father-77': '77x Our Father',
+            'our-father-77': '77× Our Father',
             'divine-mercy': 'Divine Mercy Chaplet',
             'seven-sorrows': 'Seven Sorrows Rosary',
             'franciscan-crown': 'Franciscan Crown',
@@ -114,105 +119,150 @@ export class DevotionState {
 
     private getSteps(): DevotionStep[] {
         const prayers = getPrayers(this.devotionPrayerLanguage);
-        const titles = getPrayerTitles(this.devotionPrayerLanguage);
+        const isId = this.devotionLanguage === 'id';
 
         if (this.devotionType === 'our-father-77') {
+            if (isId) {
+                return [
+                    { label: 'Tanda Salib', text: prayers.signOfCross },
+                    {
+                        label: 'Doa Pembuka',
+                        text: 'Tuhan, kasihanilah kami.\nKristus, kasihanilah kami.\nTuhan, kasihanilah kami.\nKristus, dengarkanlah kami.\nKristus, kabulkanlah doa kami.',
+                    },
+                    {
+                        label: 'Intensi Pribadi',
+                        text: 'Bapa, hari ini kami datang ke hadapan-Mu. Dengarkanlah doa kami.\n\n(Sebutkan intensi pribadi Anda.)',
+                    },
+                    { label: 'Syahadat Para Rasul', text: prayers.apostlesCreed },
+                    ...repeat('Bapa Kami', prayers.ourFather, 77),
+                    { label: 'Kemuliaan', text: prayers.gloryBe },
+                    { label: 'Tanda Salib', text: prayers.signOfCross },
+                ];
+            }
             return [
-                { label: titles.signOfCross, text: prayers.signOfCross },
+                { label: 'Sign of the Cross', text: prayers.signOfCross },
                 {
-                    label: 'Permohonan',
-                    text: 'Tuhan, kasihanilah kami.\nKristus, kasihanilah kami.\nTuhan, kasihanilah kami.\nKristus, dengarkanlah doa kami.\nKristus, kabulkanlah doa kami.',
+                    label: 'Opening Petitions',
+                    text: 'Lord, have mercy.\nChrist, have mercy.\nLord, have mercy.\nChrist, hear us.\nChrist, graciously hear us.',
                 },
                 {
-                    label: 'Permohonan Pribadi',
-                    text: 'Ya Bapa, hari ini kami menghadap kepada-Mu. Kabulkanlah permohonan kami.\n\n(Sebutkan permohonan Anda.)',
+                    label: 'Personal Intention',
+                    text: 'Father, today we come before You. Hear our prayer.\n\n(Name your personal intention.)',
                 },
-                { label: titles.apostlesCreed, text: prayers.apostlesCreed },
-                ...repeat(titles.ourFather, prayers.ourFather, 77),
-                { label: titles.gloryBe, text: prayers.gloryBe },
-                { label: titles.signOfCross, text: prayers.signOfCross },
+                { label: "Apostles' Creed", text: prayers.apostlesCreed },
+                ...repeat('Our Father', prayers.ourFather, 77),
+                { label: 'Glory Be', text: prayers.gloryBe },
+                { label: 'Sign of the Cross', text: prayers.signOfCross },
             ];
         }
 
         if (this.devotionType === 'divine-mercy') {
-            const eternalFather = this.devotionLanguage === 'id'
-                ? 'Bapa yang kekal, kupersembahkan kepada-Mu Tubuh dan Darah, Jiwa dan Keallahan Putra-Mu yang terkasih, Tuhan kami Yesus Kristus, sebagai pendamaian bagi dosa kami dan dosa seluruh dunia.'
-                : 'Eternal Father, I offer You the Body and Blood, Soul and Divinity of Your dearly beloved Son, Our Lord Jesus Christ, in atonement for our sins and those of the whole world.';
-            const sorrowfulPassion = this.devotionLanguage === 'id'
-                ? 'Demi sengsara Yesus yang pedih, tunjukkanlah belas kasih-Mu kepada kami dan seluruh dunia.'
-                : 'For the sake of His sorrowful Passion, have mercy on us and on the whole world.';
-            const holyGod = this.devotionLanguage === 'id'
-                ? 'Allah Kudus, Kudus dan Berkuasa, Kudus dan Kekal, kasihanilah kami dan seluruh dunia.'
-                : 'Holy God, Holy Mighty One, Holy Immortal One, have mercy on us and on the whole world.';
+            if (isId) {
+                const eternalFather = 'Bapa yang Kekal, kupersembahkan kepada-Mu Tubuh dan Darah, Jiwa dan Ke-Allahan Putra-Mu yang terkasih, Tuhan kami Yesus Kristus, sebagai pemulihan dosa-dosa kami dan dosa seluruh dunia.';
+                const sorrowfulPassion = 'Demi sengsara Yesus yang pedih, tunjukkanlah belas kasih-Mu kepada kami dan seluruh dunia.';
+                const holyGod = 'Allah yang Kudus, Kudus dan Berkuasa, Kudus dan Kekal, kasihanilah kami dan seluruh dunia.';
+
+                const steps: DevotionStep[] = [
+                    { label: 'Tanda Salib', text: prayers.signOfCross },
+                    { label: 'Bapa Kami', text: prayers.ourFather },
+                    { label: 'Salam Maria', text: prayers.hailMary },
+                    { label: 'Syahadat Para Rasul', text: prayers.apostlesCreed },
+                ];
+
+                for (let decade = 1; decade <= 5; decade++) {
+                    const section = `Dekade ${decade}`;
+                    steps.push({ label: 'Bapa yang Kekal', text: eternalFather, section });
+                    steps.push(...repeat('Demi Sengsara-Nya yang Pedih', sorrowfulPassion, 10, section));
+                }
+
+                steps.push(...repeat('Allah yang Kudus', holyGod, 3, 'Doa Penutup'));
+                steps.push({ label: 'Tanda Salib', text: prayers.signOfCross, section: 'Doa Penutup' });
+                return steps;
+            }
+
+            const eternalFather = 'Eternal Father, I offer You the Body and Blood, Soul and Divinity of Your dearly beloved Son, Our Lord Jesus Christ, in atonement for our sins and those of the whole world.';
+            const sorrowfulPassion = 'For the sake of His sorrowful Passion, have mercy on us and on the whole world.';
+            const holyGod = 'Holy God, Holy Mighty One, Holy Immortal One, have mercy on us and on the whole world.';
 
             const steps: DevotionStep[] = [
-                { label: titles.signOfCross, text: prayers.signOfCross },
-                { label: titles.ourFather, text: prayers.ourFather },
-                { label: titles.hailMary, text: prayers.hailMary },
-                { label: titles.apostlesCreed, text: prayers.apostlesCreed },
+                { label: 'Sign of the Cross', text: prayers.signOfCross },
+                { label: 'Our Father', text: prayers.ourFather },
+                { label: 'Hail Mary', text: prayers.hailMary },
+                { label: "The Apostles' Creed", text: prayers.apostlesCreed },
             ];
 
             for (let decade = 1; decade <= 5; decade++) {
-                const section = this.devotionLanguage === 'id' ? `Dekade ${decade}` : `Decade ${decade}`;
-                steps.push({ label: this.devotionLanguage === 'id' ? 'Bapa Kekal' : 'Eternal Father', text: eternalFather, section });
-                steps.push(...repeat(this.devotionLanguage === 'id' ? 'Demi Sengsara Yesus' : 'For the Sake of His Sorrowful Passion', sorrowfulPassion, 10, section));
+                const section = `Decade ${decade}`;
+                steps.push({ label: 'Eternal Father', text: eternalFather, section });
+                steps.push(...repeat('For the Sake of His Sorrowful Passion', sorrowfulPassion, 10, section));
             }
 
-            return [
-                ...steps,
-                ...repeat(this.devotionLanguage === 'id' ? 'Allah Kudus' : 'Holy God', holyGod, 3),
-            ];
+            steps.push(...repeat('Holy God', holyGod, 3, 'Concluding Prayer'));
+            steps.push({ label: 'Sign of the Cross', text: prayers.signOfCross, section: 'Concluding Prayer' });
+            return steps;
         }
 
         if (this.devotionType === 'franciscan-crown') {
-            const joys = this.devotionLanguage === 'id' ? SEVEN_JOYS_ID : SEVEN_JOYS_EN;
-            const joyLabel = this.devotionLanguage === 'id' ? 'Sukacita' : 'Joy';
-            const popeIntentions = this.devotionLanguage === 'id' ? 'Intensi Bapa Suci' : 'Holy Father’s Intentions';
-            const steps: DevotionStep[] = [];
+            const joys = isId ? SEVEN_JOYS_ID : SEVEN_JOYS_EN;
+            const joyLabel = isId ? 'Sukacita' : 'Joy';
+            const ourFatherLabel = isId ? 'Bapa Kami' : 'Our Father';
+            const hailMaryLabel = isId ? 'Salam Maria' : 'Hail Mary';
+            const gloryBeLabel = isId ? 'Kemuliaan' : 'Glory Be';
+            const intentions = isId ? 'Intensi Bapa Suci' : "Holy Father's Intentions";
+            const steps: DevotionStep[] = [
+                { label: isId ? 'Tanda Salib' : 'Sign of the Cross', text: prayers.signOfCross },
+            ];
 
             joys.forEach(([title, reference], index) => {
                 const section = `${joyLabel} ${index + 1}`;
-                steps.push({ label: section, text: `${title}\n\n${reference}`, section });
-                steps.push({ label: titles.ourFather, text: prayers.ourFather, section });
-                steps.push(...repeat(titles.hailMary, prayers.hailMary, 10, section));
-                steps.push({ label: titles.gloryBe, text: prayers.gloryBe, section });
+                steps.push({ label: title, text: reference, section });
+                steps.push({ label: ourFatherLabel, text: prayers.ourFather, section });
+                steps.push(...repeat(hailMaryLabel, prayers.hailMary, 10, section));
+                steps.push({ label: gloryBeLabel, text: prayers.gloryBe, section });
             });
 
-            return [
-                ...steps,
-                ...repeat(titles.hailMary, prayers.hailMary, 2, this.devotionLanguage === 'id' ? 'Menghormati Usia Maria' : 'In Honor of Mary’s Life'),
-                { label: titles.ourFather, text: prayers.ourFather, section: popeIntentions },
-                { label: titles.hailMary, text: prayers.hailMary, section: popeIntentions },
-                { label: titles.gloryBe, text: prayers.gloryBe, section: popeIntentions },
-            ];
+            const honorSection = isId ? 'Menghormati Usia Maria' : "In Honor of Mary's Life";
+            steps.push(...repeat(hailMaryLabel, prayers.hailMary, 2, honorSection));
+            steps.push({ label: ourFatherLabel, text: prayers.ourFather, section: intentions });
+            steps.push({ label: hailMaryLabel, text: prayers.hailMary, section: intentions });
+            steps.push({ label: gloryBeLabel, text: prayers.gloryBe, section: intentions });
+            return steps;
         }
 
-        const sorrows = this.devotionLanguage === 'id' ? SEVEN_SORROWS_ID : SEVEN_SORROWS_EN;
-        const sorrowLabel = this.devotionLanguage === 'id' ? 'Dukacita' : 'Sorrow';
-        const invocation = this.devotionLanguage === 'id'
-            ? 'Perawan yang Amat Berdukacita, doakanlah kami.'
+        // seven-sorrows (1:1 from seven-sorrows.md, incl. separate title/reference announcement step)
+        const sorrows = isId ? SEVEN_SORROWS_ID : SEVEN_SORROWS_EN;
+        const sorrowLabel = isId ? 'Dukacita' : 'Sorrow';
+        const ourFatherLabel = isId ? 'Bapa Kami' : 'Our Father';
+        const hailMaryLabel = isId ? 'Salam Maria' : 'Hail Mary';
+        const gloryBeLabel = isId ? 'Kemuliaan' : 'Glory Be';
+        const invocation = isId
+            ? 'Perawan yang Berdukacita, doakanlah kami.'
             : 'Virgin Most Sorrowful, pray for us.';
-        const steps: DevotionStep[] = [];
+        const steps: DevotionStep[] = [
+            { label: isId ? 'Tanda Salib' : 'Sign of the Cross', text: prayers.signOfCross },
+        ];
 
         sorrows.forEach(([title, reference], index) => {
             const section = `${sorrowLabel} ${index + 1}`;
             steps.push({
-                label: section,
-                text: `${title}\n\n${reference}`,
+                label: title,
+                text: reference,
                 section,
             });
-            steps.push({ label: titles.ourFather, text: prayers.ourFather, section });
-            steps.push(...repeat(titles.hailMary, prayers.hailMary, 7, section));
+            steps.push({ label: ourFatherLabel, text: prayers.ourFather, section });
+            steps.push(...repeat(hailMaryLabel, prayers.hailMary, 7, section));
         });
 
-        return [
-            ...steps,
-            ...repeat(titles.hailMary, prayers.hailMary, 3, this.devotionLanguage === 'id' ? 'Menghormati Air Mata Maria' : 'In Honor of Mary’s Tears'),
-            { label: titles.ourFather, text: prayers.ourFather, section: this.devotionLanguage === 'id' ? 'Intensi Bapa Suci' : 'Holy Father’s Intentions' },
-            { label: titles.hailMary, text: prayers.hailMary, section: this.devotionLanguage === 'id' ? 'Intensi Bapa Suci' : 'Holy Father’s Intentions' },
-            { label: titles.gloryBe, text: prayers.gloryBe, section: this.devotionLanguage === 'id' ? 'Intensi Bapa Suci' : 'Holy Father’s Intentions' },
-            ...repeat(this.devotionLanguage === 'id' ? 'Doa Penutup' : 'Closing Invocation', invocation, 3),
-        ];
+        const tearsSection = isId ? 'Menghormati Air Mata Maria' : "In Honor of Mary's Tears";
+        steps.push(...repeat(hailMaryLabel, prayers.hailMary, 3, tearsSection));
+        const intentions = isId ? 'Intensi Bapa Suci' : "Holy Father's Intentions";
+        steps.push({ label: ourFatherLabel, text: prayers.ourFather, section: intentions });
+        steps.push({ label: hailMaryLabel, text: prayers.hailMary, section: intentions });
+        steps.push({ label: gloryBeLabel, text: prayers.gloryBe, section: intentions });
+        const closingSection = isId ? 'Doa Penutup' : 'Closing Invocation';
+        const closingLabel = isId ? 'Doa Penutup' : 'Closing Invocation';
+        steps.push(...repeat(closingLabel, invocation, 3, closingSection));
+        return steps;
     }
 
     advance(): void {

@@ -28,6 +28,10 @@ export class RosaryState {
         this.complete = false;
     }
 
+    // DELIBERATE web-only divergence from Android: Indonesian custom adds an
+    // opening Kemuliaan right after the Creed (before Bapa Kami). Orang Indo
+    // setelah Aku Percaya emang suka nambahin Kemuliaan. ID rosaries are
+    // therefore 81 steps; all other languages stay at 80 like Android.
     private usesIndonesianOpeningGloryBe(): boolean {
         return this.language === 'id';
     }
@@ -258,9 +262,9 @@ export class RosaryState {
         }
     }
 
-    // Get current prayer label/title
+    // Get current prayer label/title (1:1 from Android: titles follow UI language, not Latin toggle)
     getCurrentPrayerLabel(): string {
-        const PRAYER_TITLES = getPrayerTitles(this.prayerLanguage);
+        const PRAYER_TITLES = getPrayerTitles(this.language);
 
         switch (this.stage) {
             case STAGE_INTRO:
@@ -284,8 +288,9 @@ export class RosaryState {
 
             case STAGE_DECADE:
                 if (this.prayerCount === 0) {
+                    // 1:1 from Android mystery_label: "Mystery #%d" / "Peristiwa #%d"
                     const label = this.language === 'id' ? 'Peristiwa' : 'Mystery';
-                    return `${label} ${this.decadeCount}`;
+                    return `${label} #${this.decadeCount}`;
                 }
                 if (this.prayerCount === 1) return PRAYER_TITLES.ourFather;
                 if (this.prayerCount >= 2 && this.prayerCount <= 11) {
@@ -315,7 +320,7 @@ export class RosaryState {
         return "";
     }
 
-    // Get total count (1-80)
+    // Get total count (80, or 81 with the deliberate ID opening Kemuliaan)
     getTotalCount(): number {
         let totalCount = 0;
 
@@ -347,7 +352,8 @@ export class RosaryState {
         return totalCount;
     }
 
-    // Get max count (80)
+    // Get max count (80, or 81 in Indonesian with the deliberate opening Kemuliaan;
+    // Android is always 80)
     getMaxCount(): number {
         return 2 + this.getFirstPrayersLength() + (5 * 14) + 3;
     }
