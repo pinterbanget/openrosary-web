@@ -171,42 +171,45 @@ export class RosaryState {
         }
     }
 
-    // Check if this is a bead type transition (for vibration)
+    // Keep this in lockstep with OpenRosary Android's isBeadTypeTransition().
     isBeadTypeTransition(isAdvancing: boolean): boolean {
         const currentStage = this.stage;
         const currentPrayer = this.prayerCount;
 
-        // Mystery transitions should not trigger special vibration
-        if (currentStage === STAGE_DECADE) {
-            if (currentPrayer === 0 || currentPrayer === 1) {
-                return false;
-            }
+        // Mystery transitions do not trigger special vibration.
+        if (currentStage === STAGE_DECADE && (currentPrayer === 0 || currentPrayer === 1)) {
+            return false;
         }
 
         if (isAdvancing) {
             if (currentStage === STAGE_DECADE) {
-                // From Hail Mary to Glory Be
-                if (currentPrayer === 11) return true;
-                // From Our Father to first Hail Mary
-                if (currentPrayer === 1) return true;
+                // From Hail Mary to Glory Be.
+                if (currentPrayer === 12) return true;
+                // From Our Father to the first Hail Mary.
+                if (currentPrayer === 2) return true;
+            } else if (currentStage === STAGE_FIRST_PRAYERS && currentPrayer === 5) {
+                // From Glory Be in the opening prayers to the decade.
+                return true;
+            } else if (currentStage === STAGE_INTRO && currentPrayer === 2) {
+                // From the Apostles' Creed to the Our Father.
+                return true;
             }
-            // From Glory Be in first prayers to decade
-            else if (currentStage === STAGE_FIRST_PRAYERS && currentPrayer === this.getFirstPrayersMaxIndex()) return true;
-            // From Apostles' Creed to Our Father
-            else if (currentStage === STAGE_INTRO && currentPrayer === 1) return true;
         } else {
             if (currentStage === STAGE_DECADE) {
-                // From first Hail Mary back to Our Father
+                // From the first Hail Mary back to the Our Father.
                 if (currentPrayer === 2) return true;
-                // From Glory Be back to last Hail Mary
+                // From Glory Be back to the last Hail Mary.
                 if (currentPrayer === 12) return true;
+            } else if (currentStage === STAGE_DECADE && currentPrayer === 0 && this.mysteryIndex === 0) {
+                // From the first decade back to the opening Glory Be.
+                return true;
+            } else if (currentStage === STAGE_FIRST_PRAYERS && currentPrayer === 0) {
+                // From the Our Father back to the Apostles' Creed.
+                return true;
+            } else if (currentStage === STAGE_CONCLUSION && currentPrayer === 0) {
+                // From conclusion prayers back to the last decade.
+                return true;
             }
-            // From first decade back to Glory Be of first prayers
-            else if (currentStage === STAGE_DECADE && currentPrayer === 0 && this.mysteryIndex === 0) return true;
-            // From Our Father in first prayers back to Apostles' Creed
-            else if (currentStage === STAGE_FIRST_PRAYERS && currentPrayer === 0) return true;
-            // From conclusion prayers back to last decade
-            else if (currentStage === STAGE_CONCLUSION && currentPrayer === 0) return true;
         }
 
         return false;

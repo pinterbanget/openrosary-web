@@ -1,22 +1,24 @@
-// Web Vibration API wrapper
-// Note: Vibration API is supported on Chrome Android but not iOS Safari or desktop Chrome
+// Android OpenRosary uses these exact timings (including the leading 0ms delay).
+const SINGLE_PATTERN: VibratePattern = 50;
+const DOUBLE_PATTERN: VibratePattern = [0, 50, 100, 50];
+const TRIPLE_PATTERN: VibratePattern = [0, 50, 100, 50, 100, 50];
+
+type VibratePattern = number | number[];
+
+function vibrate(pattern: VibratePattern) {
+    if ('vibrate' in navigator) {
+        navigator.vibrate(pattern);
+    }
+}
 
 export function singleVibrate() {
-    if ('vibrate' in navigator) {
-        navigator.vibrate(50);
-    }
+    vibrate(SINGLE_PATTERN);
 }
 
 export function tripleVibrate() {
-    if ('vibrate' in navigator) {
-        // Pattern: vibrate 50ms, wait 100ms, vibrate 50ms, wait 100ms, vibrate 50ms
-        navigator.vibrate([50, 100, 50, 100, 50]);
-    }
+    vibrate(TRIPLE_PATTERN);
 }
 
 export function doubleVibrate() {
-    if ('vibrate' in navigator) {
-        // Pattern: vibrate 50ms, wait 100ms, vibrate 50ms
-        navigator.vibrate([50, 100, 50]);
-    }
+    vibrate(DOUBLE_PATTERN);
 }
