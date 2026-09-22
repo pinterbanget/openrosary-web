@@ -2,6 +2,21 @@
 
 OpenRosary Web is a simple browser-based rosary tool built with Next.js.
 
+The Android app landing page is available at `/app`. The existing browser prayer tool remains at `/`, and the landing page links to it with **Open web version**.
+
+## Android app landing page
+
+- `app/app/` contains the landing page and Android privacy page.
+- `public/app/screenshots/` contains captures of the running Android 0.4 release, including English light mode and Latin dark mode.
+- `public/app/downloads/openrosary-0.4.apk` is the signed APK for Android 8.0 and newer. Its signing certificate matches the public 0.3 release.
+- The adjacent `.sha256` file records the APK checksum. Replace the APK, checksum, screenshot assets, versioned links, and download headers together when publishing another version.
+- `public/_headers` makes Cloudflare serve the APK as an Android package download.
+- `public/app/social.svg` is the editable source for the social preview PNG.
+
+The page uses the existing Geist font and blue/navy light and dark colour tokens. Phone frames contain real screenshots. It includes reduced-motion support, keyboard focus, a skip link, and native FAQ disclosures.
+
+Production is deployed by the existing **Workers Builds: openrosary-web** GitHub integration when `main` is updated. Run `npm run build` and `npx tsc --noEmit` before publishing. Do not run a production build while the development server is using the same output directory.
+
 The site lets you pick a set of mysteries, step through the rosary prayer by prayer, and read a Scripture passage for each decade. It is designed for phone use as well as desktop, with keyboard and swipe navigation.
 
 ## What The Website Does
