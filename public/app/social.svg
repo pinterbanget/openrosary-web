@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="#08111f"/>
-  <g font-family="Geist, sans-serif" fill="#f6f8fc">
-    <text x="80" y="102" font-size="32" font-weight="600" fill="#9dceff">(openrosary)</text>
-    <text x="80" y="256" font-size="72" font-weight="600" letter-spacing="-3">A quiet companion</text>
-    <text x="80" y="344" font-size="72" font-weight="600" letter-spacing="-3">for your daily Rosary.</text>
+  <g font-family="Google Sans, Google Sans Text, DM Sans, sans-serif" fill="#f6f8fc">
+    <text x="80" y="102" font-size="32" font-weight="700" fill="#9dceff" letter-spacing="-1.28">(openrosary)</text>
+    <text x="80" y="256" font-size="80" font-weight="700" letter-spacing="-5.2">The Rosary,</text>
+    <text x="80" y="344" font-size="80" font-weight="700" letter-spacing="-5.2">one prayer at a time.</text>
     <text x="80" y="422" font-size="26" fill="#b5c2d4">Pray offline on Android. Or open the web version.</text>
     <text x="80" y="548" font-size="22" fill="#9dceff">openrosary.ryanson.id/app</text>
     <text x="1120" y="548" text-anchor="end" font-size="22" fill="#9dceff">(ryanson.id)</text>

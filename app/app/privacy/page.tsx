@@ -18,7 +18,7 @@ export default function PrivacyPage() {
       <header><Link className={styles.brand} href="/app">(openrosary)</Link></header>
       <main id="privacy" tabIndex={-1}>
         <p className={styles.eyebrow}>Android app · Updated 8 September 2026</p>
-        <h1>Your prayer stays with you.</h1>
+        <h1>Privacy in OpenRosary</h1>
         <p className={styles.intro}>OpenRosary is an offline prayer application. The Android app has no account system, advertising SDK, analytics SDK, or in-app network client. Prayer content is included in the app.</p>
         <section>
           <h2>Preferences on your device</h2>

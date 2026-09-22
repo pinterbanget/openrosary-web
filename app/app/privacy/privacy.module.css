@@ -1,12 +1,12 @@
 .page { max-width: 800px; margin: 0 auto; padding: 32px 24px; color: var(--text); }
 .page header { padding: 16px 0 64px; }
 .page a { color: var(--accent); text-underline-offset: 4px; }
-.brand { font-size: 24px; font-weight: 600; letter-spacing: -1px; text-decoration: none; }
+.brand { font-size: 24px; font-weight: 700; letter-spacing: -0.04em; text-decoration: none; }
 .eyebrow { color: var(--muted); font-size: 14px; line-height: 20px; margin-bottom: 16px; }
-.page h1 { font-size: 48px; line-height: 1; letter-spacing: -2px; max-width: 680px; text-wrap: balance; }
+.page h1 { font-size: 48px; font-weight: 700; line-height: 1; letter-spacing: -0.065em; max-width: 680px; text-wrap: balance; }
 .page .intro { font-size: 20px; line-height: 28px; margin-top: 24px; }
 .page section { margin-top: 40px; }
-.page h2 { font-size: 24px; line-height: 32px; font-weight: 600; margin-bottom: 12px; }
+.page h2 { font-size: 24px; line-height: 32px; font-weight: 700; letter-spacing: -0.055em; margin-bottom: 12px; }
 .page p { color: var(--muted); font-size: 18px; line-height: 28px; text-wrap: pretty; }
 .page p + p { margin-top: 16px; }
 .back { display: inline-flex; align-items: center; min-height: 48px; margin-top: 40px; }

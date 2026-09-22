@@ -7,13 +7,13 @@ The Android app landing page is available at `/app`. The existing browser prayer
 ## Android app landing page
 
 - `app/app/` contains the landing page and Android privacy page.
-- `public/app/screenshots/` contains captures of the running Android 0.4 release, including English light mode and Latin dark mode.
+- `public/app/screenshots/` contains 1080 × 2220 (18.5:9 portrait) captures of the signed Android 0.4 release, including English light mode and Latin dark mode. Capture the app at this resolution so its layout reflows; do not stretch or crop a shorter screen.
 - `public/app/downloads/openrosary-0.4.apk` is the signed APK for Android 8.0 and newer. Its signing certificate matches the public 0.3 release.
 - The adjacent `.sha256` file records the APK checksum. Replace the APK, checksum, screenshot assets, versioned links, and download headers together when publishing another version.
 - `public/_headers` makes Cloudflare serve the APK as an Android package download.
 - `public/app/social.svg` is the editable source for the social preview PNG.
 
-The page uses the existing Geist font and blue/navy light and dark colour tokens. Phone frames contain real screenshots. It includes reduced-motion support, keyboard focus, a skip link, and native FAQ disclosures.
+The landing page follows ryanson.id’s font stack: Google Sans, Google Sans Text, and a bundled DM Sans fallback. Headings and the wordmark use weight 700, body and navigation text use 400, and action labels use 600. This font is scoped to `/app`; the browser prayer tool keeps its existing typography. Blue/navy light and dark colour tokens remain shared with the app. Phone frames contain real screenshots. Keyboard focus, a skip link, and native FAQ disclosures support navigation without a mouse.
 
 Production is deployed by the existing **Workers Builds: openrosary-web** GitHub integration when `main` is updated. Run `npm run build` and `npx tsc --noEmit` before publishing. Do not run a production build while the development server is using the same output directory.
 

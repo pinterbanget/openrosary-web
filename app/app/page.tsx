@@ -6,34 +6,34 @@ export const metadata: Metadata = {
   icons: {
     icon: '/app/icon.svg',
   },
-  title: 'OpenRosary | A quiet companion for your daily Rosary',
+  title: 'OpenRosary | The Rosary, one prayer at a time',
   description:
-    'OpenRosary is a free, open source rosary app for quiet daily prayer. Use it offline on Android or open the web version anywhere.',
+    'Pray the Rosary with guided prayers, volume button navigation, and offline access on Android. Free and open source, with a web version too.',
   alternates: {
     canonical: '/app',
   },
   openGraph: {
-    title: 'OpenRosary | A quiet companion for your daily Rosary',
+    title: 'OpenRosary | The Rosary, one prayer at a time',
     description:
-      'A free, open source rosary app for quiet daily prayer, available offline on Android and on the web.',
+      'Pray the Rosary in English or Indonesian, with optional Latin prayers. Available offline on Android and in your browser.',
     url: '/app',
     siteName: 'OpenRosary',
     type: 'website',
     images: [
       {
-        url: '/app/social.png',
+        url: '/app/social.png?v=2',
         width: 1200,
         height: 630,
-        alt: 'OpenRosary, a quiet companion for daily prayer',
+        alt: 'OpenRosary: the Rosary, one prayer at a time',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'OpenRosary | A quiet companion for your daily Rosary',
+    title: 'OpenRosary | The Rosary, one prayer at a time',
     description:
-      'A free, open source rosary app for quiet daily prayer, available offline on Android and on the web.',
-    images: ['/app/social.png'],
+      'Pray the Rosary in English or Indonesian, with optional Latin prayers. Available offline on Android and in your browser.',
+    images: ['/app/social.png?v=2'],
   },
 };
 
