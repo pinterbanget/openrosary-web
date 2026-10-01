@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type MouseEvent } from 'react';
 import styles from './landing.module.css';
 
 type Theme = 'light' | 'dark';
@@ -8,6 +8,11 @@ type Theme = 'light' | 'dark';
 const DOWNLOAD_HREF = '/app/downloads/openrosary-0.4.apk';
 const SOURCE_HREF = 'https://github.com/pinterbanget/openrosary';
 const SCREENSHOT_VERSION = '?v=1859';
+const navItems = [
+  { id: 'features', label: 'Features' },
+  { id: 'how-it-works', label: 'How to pray' },
+  { id: 'faq', label: 'Questions' },
+];
 
 function screenshotPath(filename: string) {
   return `/app/screenshots/${filename}${SCREENSHOT_VERSION}`;
@@ -39,9 +44,10 @@ function MoonIcon() {
 }
 
 function PhoneFrame({ caption, theme }: { caption: string; theme: Theme }) {
-  const imageAlt = theme === 'dark'
-    ? 'OpenRosary prayer screen with Latin prayers in AMOLED dark mode'
-    : 'OpenRosary prayer screen with English prayers in light mode';
+  const imageAlt =
+    theme === 'dark'
+      ? 'OpenRosary prayer screen with Latin prayers in AMOLED dark mode'
+      : 'OpenRosary prayer screen with English prayers in light mode';
 
   return (
     <figure className={styles.phoneFigure}>
@@ -50,7 +56,9 @@ function PhoneFrame({ caption, theme }: { caption: string; theme: Theme }) {
         <div className={styles.phoneScreen}>
           <img
             className={styles.phoneImage}
-            src={screenshotPath(theme === 'dark' ? 'prayer-dark.png' : 'prayer-light.png')}
+            src={screenshotPath(
+              theme === 'dark' ? 'prayer-dark.png' : 'prayer-light.png'
+            )}
             width={1080}
             height={2220}
             alt={imageAlt}
@@ -71,7 +79,7 @@ const faqItems = [
   {
     question: 'How do I install the Android APK?',
     answer:
-      'Tap Download APK, open the file, and follow the Android prompt. Your browser or file manager may ask once if it can install apps. Then open OpenRosary and choose a mystery.',
+      'Tap Download APK, open the downloaded file, and follow the Android installation prompt. If asked, allow your browser or file manager to install the app. Then open OpenRosary and choose a mystery.',
   },
   {
     question: 'Which Android versions are supported?',
@@ -80,12 +88,12 @@ const faqItems = [
   {
     question: 'Can I use OpenRosary on an iPhone?',
     answer:
-      'Yes. Open the web version in Safari or another modern browser. It gives you the same prayer flow without an Android installation.',
+      'Yes. Open the web version in Safari or another modern browser to pray on your iPhone.',
   },
   {
-    question: 'Are Indonesian and Latin prayers available?',
+    question: 'Which languages can I pray in?',
     answer:
-      'English and Indonesian are available in the app. You can also turn on optional Latin prayers from the language controls.',
+      'Choose English or Indonesian, with more languages to come. You can also turn on Latin prayers in the language controls while keeping the mystery readings in English or Indonesian.',
   },
   {
     question: 'Does it cost anything, and what does it collect?',
@@ -96,22 +104,75 @@ const faqItems = [
 
 export default function Landing() {
   const [theme, setTheme] = useState<Theme>('dark');
+  const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
-    const saved = window.localStorage.getItem('openrosary-theme') as Theme | null;
-    const initial = saved === 'light' || saved === 'dark'
-      ? saved
-      : window.matchMedia('(prefers-color-scheme: light)').matches
-        ? 'light'
-        : 'dark';
+    const saved = window.localStorage.getItem(
+      'openrosary-theme'
+    ) as Theme | null;
+    const initial =
+      saved === 'light' || saved === 'dark'
+        ? saved
+        : window.matchMedia('(prefers-color-scheme: light)').matches
+          ? 'light'
+          : 'dark';
     document.documentElement.dataset.theme = initial;
     setTheme(initial);
   }, []);
+
+  useEffect(() => {
+    let scrollTimer = 0;
+    const updateSection = () => {
+      const current = navItems
+        .filter(({ id }) => {
+          const section = document.getElementById(id);
+          return section && section.getBoundingClientRect().top <= 180;
+        })
+        .at(-1);
+      setActiveSection(current?.id ?? '');
+    };
+    const onScroll = () => {
+      window.clearTimeout(scrollTimer);
+      scrollTimer = window.setTimeout(updateSection, 100);
+    };
+    updateSection();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.clearTimeout(scrollTimer);
+    };
+  }, []);
+
+  const navigateToSection = (
+    event: MouseEvent<HTMLAnchorElement>,
+    id: string
+  ) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+      return;
+    setActiveSection(id);
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document
+        .getElementById(id)
+        ?.querySelector('h2')
+        ?.animate(
+          [
+            { opacity: 0.5, transform: 'translateY(12px)' },
+            { opacity: 1, transform: 'translateY(0)' },
+          ],
+          {
+            duration: 800,
+            delay: 180,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          }
+        );
+    }
+  };
 
   const toggleTheme = () => {
     const next: Theme = theme === 'light' ? 'dark' : 'light';
     const applyTheme = () => {
       document.documentElement.dataset.theme = next;
+      setTheme(next);
     };
     const transitionDocument = document as Document & {
       startViewTransition?: (callback: () => void) => void;
@@ -126,30 +187,51 @@ export default function Landing() {
     }
 
     window.localStorage.setItem('openrosary-theme', next);
-    setTheme(next);
   };
 
   return (
     <div className={styles.page}>
-      <a className={styles.skipLink} href="#main-content">Skip to content</a>
+      <a className={styles.skipLink} href="#main-content">
+        Skip to content
+      </a>
 
       <header className={styles.siteHeader}>
         <div className={styles.headerInner}>
-          <div className={styles.headerTop}>
-            <a className={styles.wordmark} href="/app" aria-current="page">(openrosary)</a>
-            <button className={styles.themeButton} type="button" onClick={toggleTheme} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
-              {theme === 'light' ? <MoonIcon /> : <SunIcon />}
-              <span>{theme === 'light' ? 'dark mode' : 'light mode'}</span>
-            </button>
-          </div>
+          <a className={styles.wordmark} href="/app" aria-current="page">
+            OpenRosary
+          </a>
           <nav className={styles.nav} aria-label="Primary navigation">
-            <a href="#features">features</a>
-            <a href="#how-it-works">how it works</a>
-            <a href="#faq">questions</a>
-            <a className={styles.navDownload} href={DOWNLOAD_HREF} download="OpenRosary-0.4.apk">
-              download APK
-            </a>
+            {navItems.map(({ id, label }) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                onClick={(event) => navigateToSection(event, id)}
+                aria-current={activeSection === id ? 'location' : undefined}
+              >
+                {label}
+              </a>
+            ))}
           </nav>
+          <div className={styles.headerActions}>
+            <button
+              className={styles.themeButton}
+              type="button"
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            >
+              <span className={styles.themeIcon} key={theme}>
+                {theme === 'light' ? <MoonIcon /> : <SunIcon />}
+              </span>
+            </button>
+            <a
+              className={styles.navDownload}
+              href={DOWNLOAD_HREF}
+              download="OpenRosary-0.4.apk"
+            >
+              Download APK
+            </a>
+          </div>
         </div>
       </header>
 
@@ -157,24 +239,38 @@ export default function Landing() {
         <section className={styles.hero} aria-labelledby="hero-heading">
           <div className={styles.heroCopy}>
             <h1 id="hero-heading" className={styles.heroTitle}>
-              The Rosary,{' '}
-              <span>one prayer at a time.</span>
+              The Rosary, <span>one prayer at a time.</span>
             </h1>
             <p className={styles.heroIntro}>
-              Pray the Rosary and other Catholic devotions with guidance for each prayer. Choose English or Indonesian, add Latin prayers if you prefer, and use the Android app offline.
+              Follow each prayer of the Rosary at your own pace. Pray offline on
+              Android or open OpenRosary in your browser.
+            </p>
+            <p className={styles.languageNote}>
+              Choose English or Indonesian, with more languages to come. Latin
+              prayers are available too.
             </p>
             <div className={styles.heroActions}>
-              <a className={`${styles.button} ${styles.buttonPrimary}`} href={DOWNLOAD_HREF} download="OpenRosary-0.4.apk">
+              <a
+                className={`${styles.button} ${styles.buttonPrimary}`}
+                href={DOWNLOAD_HREF}
+                download="OpenRosary-0.4.apk"
+              >
                 <DownloadIcon />
                 <span>Download APK</span>
               </a>
-              <a className={`${styles.button} ${styles.buttonSecondary}`} href="/">
+              <a
+                className={`${styles.button} ${styles.buttonSecondary}`}
+                href="/"
+              >
                 <span>Open web version</span>
               </a>
             </div>
-            <div className={styles.proofLine} aria-label="OpenRosary availability">
-              <span>free and open source</span>
-              <span>offline Android app</span>
+            <div
+              className={styles.proofLine}
+              aria-label="OpenRosary availability"
+            >
+              <span>Free and open source</span>
+              <span>Works offline on Android</span>
               <span>Android 8.0+</span>
             </div>
           </div>
@@ -182,15 +278,31 @@ export default function Landing() {
           <div className={styles.heroVisual}>
             <PhoneFrame
               theme={theme}
-              caption={theme === 'dark' ? 'Latin prayers · AMOLED dark theme' : 'English prayers · light theme'}
+              caption={
+                theme === 'dark'
+                  ? 'Latin prayers · AMOLED dark theme'
+                  : 'English prayers · light theme'
+              }
             />
           </div>
         </section>
 
-        <section id="features" className={styles.contentSection} aria-labelledby="features-heading">
+        <section
+          id="features"
+          tabIndex={-1}
+          className={styles.contentSection}
+          aria-labelledby="features-heading"
+        >
           <div className={styles.sectionIntro}>
-            <h2 id="features-heading">Prayer, at your pace.</h2>
-            <p>The four mysteries, other devotions, and the prayers you need, together in one place.</p>
+            <h2 id="features-heading">
+              Keep your place.
+              <br />
+              Take your time.
+            </h2>
+            <p>
+              OpenRosary shows the prayer you’re on and keeps track as you move
+              through each decade.
+            </p>
           </div>
 
           <div className={styles.featureShowcase}>
@@ -205,9 +317,11 @@ export default function Landing() {
                     loading="lazy"
                   />
                 </div>
-                <figcaption>English welcome screen · choose a mystery</figcaption>
+                <figcaption>
+                  English welcome screen · choose a mystery
+                </figcaption>
               </figure>
-              <figure className={`${styles.featureScreenshot} ${styles.featureScreenshotOffset}`}>
+              <figure className={styles.featureScreenshot}>
                 <div className={styles.screenshotFrame}>
                   <img
                     src={screenshotPath('prayer-dark.png')}
@@ -223,54 +337,101 @@ export default function Landing() {
 
             <div className={styles.featureList}>
               <article className={styles.featureItem}>
-                <h3>Every mystery, ready to pray.</h3>
-                <p>The welcome screen keeps all four mysteries within reach and suggests one for today. Other devotions include 77 Our Father, Divine Mercy, Seven Sorrows, and Franciscan Crown.</p>
+                <h3>Choose your prayers</h3>
+                <p>
+                  Pray the Joyful, Sorrowful, Glorious, or Luminous Mysteries,
+                  with a suggestion for today. You’ll also find the Divine Mercy
+                  Chaplet, Seven Sorrows, Franciscan Crown, and 77 Our Father.
+                </p>
               </article>
               <article className={styles.featureItem}>
-                <h3>Follow each prayer by touch.</h3>
-                <p>Swipe between prayers or use the volume keys on Android. Haptic feedback marks each move. In the web version, arrow keys and swipe gestures keep the page moving with you.</p>
+                <h3>Move with a swipe or a press</h3>
+                <p>
+                  Swipe to the next prayer, or use your Android volume buttons.
+                  Optional vibration gives you a cue as you move. In the
+                  browser, use swipes or arrow keys.
+                </p>
               </article>
               <article className={styles.featureItem}>
-                <h3>Readable in any light.</h3>
-                <p>Switch between the light theme and AMOLED dark mode. English and Indonesian are built in, and the language controls include optional Latin prayers.</p>
+                <h3>Make it comfortable to read</h3>
+                <p>
+                  Use the light theme during the day or AMOLED dark mode in low
+                  light. Choose English or Indonesian, or turn on Latin prayers
+                  from the language controls.
+                </p>
               </article>
             </div>
           </div>
         </section>
 
-        <section id="how-it-works" className={`${styles.contentSection} ${styles.howSection}`} aria-labelledby="how-heading">
+        <section
+          id="how-it-works"
+          tabIndex={-1}
+          className={`${styles.contentSection} ${styles.howSection}`}
+          aria-labelledby="how-heading"
+        >
           <div className={styles.sectionIntro}>
-            <h2 id="how-heading">From download to prayer.</h2>
-            <p>Download the APK for Android, or pray in your browser on any device.</p>
+            <h2 id="how-heading">Two ways to pray.</h2>
+            <p>
+              Install the Android app for offline prayer, or use the web version
+              on your phone or computer.
+            </p>
           </div>
           <div className={styles.steps}>
             <article className={styles.stepOption}>
               <div className={styles.stepCopy}>
                 <h3>Download the Android app</h3>
-                <p>On Android 8.0 or later, download the APK and follow the install prompt.</p>
+                <p>
+                  Download the APK, open the file, and follow the installation
+                  prompt. Requires Android 8.0 or later.
+                </p>
               </div>
-              <a className={styles.inlineAction} href={DOWNLOAD_HREF} download="OpenRosary-0.4.apk">Download APK</a>
+              <a
+                className={styles.inlineAction}
+                href={DOWNLOAD_HREF}
+                download="OpenRosary-0.4.apk"
+              >
+                Download APK
+              </a>
             </article>
             <article className={styles.stepOption}>
               <div className={styles.stepCopy}>
                 <h3>Open the web version</h3>
-                <p>On iPhone or desktop, open OpenRosary in your browser. The prayer flow is ready without an Android install.</p>
+                <p>
+                  Pray on iPhone, Android, or desktop with your browser. Open
+                  the page and choose a mystery.
+                </p>
               </div>
-              <a className={styles.inlineAction} href="/">Open web version</a>
+              <a className={styles.inlineAction} href="/">
+                Open web version
+              </a>
             </article>
-            <p className={styles.stepNote}>Choose a mystery, then use swipe gestures on either version. Android also supports volume keys, while the web version responds to arrow keys.</p>
+            <p className={styles.stepNote}>
+              Once you’ve chosen a mystery, follow the prayer on screen. Move
+              forward when you’re ready, or go back whenever you need.
+            </p>
           </div>
         </section>
 
-        <section id="faq" className={`${styles.contentSection} ${styles.faqSection}`} aria-labelledby="faq-heading">
+        <section
+          id="faq"
+          tabIndex={-1}
+          className={`${styles.contentSection} ${styles.faqSection}`}
+          aria-labelledby="faq-heading"
+        >
           <div className={styles.sectionIntro}>
             <h2 id="faq-heading">Before you begin.</h2>
-            <p>Practical details about the Android app, the web version, and the prayers inside.</p>
+            <p>
+              A few answers about installation, languages, and using OpenRosary.
+            </p>
           </div>
           <div className={styles.faqList}>
             {faqItems.map((item) => (
               <details key={item.question} className={styles.faqItem}>
-                <summary>{item.question}<span aria-hidden="true">+</span></summary>
+                <summary>
+                  {item.question}
+                  <span aria-hidden="true">+</span>
+                </summary>
                 <p>{item.answer}</p>
               </details>
             ))}
@@ -278,32 +439,64 @@ export default function Landing() {
         </section>
 
         <section className={styles.finalCta} aria-labelledby="final-heading">
-          <h2 id="final-heading">Start with one prayer.</h2>
-          <p>Download the Android app or open OpenRosary in your browser.</p>
-          <div className={styles.heroActions}>
-            <a className={`${styles.button} ${styles.buttonPrimary}`} href={DOWNLOAD_HREF} download="OpenRosary-0.4.apk">
-              <DownloadIcon />
-              <span>Download APK</span>
-            </a>
-            <a className={`${styles.button} ${styles.buttonSecondary}`} href="/">
-              <span>Open web version</span>
-            </a>
+          <div className={styles.finalCopy}>
+            <h2 id="final-heading">Ready to pray?</h2>
+            <p>Choose a mystery. Begin at your own pace.</p>
           </div>
-          <p className={styles.finalMeta}>Free and open source · Android 8.0+</p>
+          <div className={styles.finalActions}>
+            <div className={styles.heroActions}>
+              <a
+                className={`${styles.button} ${styles.buttonPrimary}`}
+                href={DOWNLOAD_HREF}
+                download="OpenRosary-0.4.apk"
+              >
+                <DownloadIcon />
+                <span>Download APK</span>
+              </a>
+              <a
+                className={`${styles.button} ${styles.buttonSecondary}`}
+                href="/"
+              >
+                <span>Open web version</span>
+              </a>
+            </div>
+            <p className={styles.finalMeta}>
+              Free and open source · Android 8.0+
+            </p>
+          </div>
         </section>
       </main>
 
       <footer className={styles.footer}>
         <div className={styles.footerInner}>
-          <div>
-            <a className={styles.wordmark} href="/app">(openrosary)</a>
-            <a className={styles.footerByline} href="https://ryanson.id" target="_blank" rel="noreferrer">(ryanson.id)</a>
+          <div className={styles.footerBrand}>
+            <a className={styles.wordmark} href="/app">
+              OpenRosary
+            </a>
+            <p>
+              The Rosary and Catholic devotions,
+              <br />
+              one prayer at a time.
+            </p>
           </div>
           <nav className={styles.footerLinks} aria-label="Footer navigation">
-            <a href={SOURCE_HREF} target="_blank" rel="noreferrer">GitHub source</a>
-            <a href="/app/privacy">Privacy</a>
-            <a href="/">Web version</a>
+            <a href="/">Pray in your browser</a>
+            <a href={SOURCE_HREF} target="_blank" rel="noreferrer">
+              GitHub source
+            </a>
+            <a href="/app/privacy">Privacy policy</a>
           </nav>
+          <div className={styles.footerBottom}>
+            <p>Free and open source.</p>
+            <a
+              className={styles.footerByline}
+              href="https://ryanson.id"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Made by <span>Ryanson</span>
+            </a>
+          </div>
         </div>
       </footer>
     </div>

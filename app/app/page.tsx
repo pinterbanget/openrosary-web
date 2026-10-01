@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/app/social.png?v=2',
+        url: '/app/social.png?v=3',
         width: 1200,
         height: 630,
         alt: 'OpenRosary: the Rosary, one prayer at a time',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     title: 'OpenRosary | The Rosary, one prayer at a time',
     description:
       'Pray the Rosary in English or Indonesian, with optional Latin prayers. Available offline on Android and in your browser.',
-    images: ['/app/social.png?v=2'],
+    images: ['/app/social.png?v=3'],
   },
 };
 

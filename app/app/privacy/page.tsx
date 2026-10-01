@@ -15,7 +15,7 @@ export default function PrivacyPage() {
     <div className={styles.page}>
       <a className={styles.skip} href="#privacy">Skip to content</a>
       <ThemeToggle />
-      <header><Link className={styles.brand} href="/app">(openrosary)</Link></header>
+      <header><Link className={styles.brand} href="/app">OpenRosary</Link></header>
       <main id="privacy" tabIndex={-1}>
         <p className={styles.eyebrow}>Android app · Updated 8 September 2026</p>
         <h1>Privacy in OpenRosary</h1>
