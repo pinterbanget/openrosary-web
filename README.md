@@ -42,14 +42,14 @@ The site lets you pick a set of mysteries, step through the rosary prayer by pra
   Use the left/right or up/down arrow keys to move through the rosary.
 - Mobile:
   Swipe left to advance and swipe right to go back.
-- The rosary page also shows progress out of `80` steps.
+- The rosary page also shows progress out of `80` steps in English, or `81` in Indonesian.
 
 ## Project Structure
 
 - `app/page.tsx`
   Home screen with mystery selection and the Latin prayers toggle.
 - `app/rosary/page.tsx`
-  Main rosary experience, reading-language selector, navigation, and completion modal.
+  Rosary prayer page, reading-language selector, navigation, and completion modal.
 - `lib/prayers.ts`
   Prayer texts, prayer titles, and mystery readings for English, Indonesian, and Latin prayers.
 - `lib/rosaryState.ts`

@@ -53,7 +53,7 @@ export default function LanguageMenu({ language, latinPrayers, onLanguageChange,
             >
               {AVAILABLE_LANGUAGES.map(lang => (
                 <option key={lang.code} value={lang.code}>
-                  {lang.nativeLabel} — {lang.label}
+                  {lang.nativeLabel} · {lang.label}
                 </option>
               ))}
             </select>
