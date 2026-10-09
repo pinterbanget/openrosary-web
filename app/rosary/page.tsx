@@ -263,7 +263,9 @@ function RosaryContent() {
             {showCompletion && (
                 <div className="modal-backdrop open">
                     <div className="modal">
-                        <h3>{language === 'id' ? 'rosario selesai' : 'rosary complete'}</h3>
+                        <h3>{rosaryState instanceof DevotionState
+                            ? (language === 'id' ? 'doa selesai' : 'prayer complete')
+                            : (language === 'id' ? 'rosario selesai' : 'rosary complete')}</h3>
                         <p className="muted">
                             {language === 'id'
                                 ? `Anda telah menyelesaikan ${rosaryState instanceof DevotionState ? rosaryState.getDevotionName() : `Peristiwa ${rosaryState.getMysteryType()} Rosario Suci`}. Tuhan memberkati Anda.`

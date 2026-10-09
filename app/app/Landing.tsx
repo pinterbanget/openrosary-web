@@ -93,7 +93,7 @@ const faqItems = [
   {
     question: 'Which languages can I pray in?',
     answer:
-      'Choose English or Indonesian, with more languages to come. You can also turn on Latin prayers in the language controls while keeping the mystery readings in English or Indonesian.',
+      'Choose English or Indonesian. You can also turn on Latin prayers in the language controls while keeping the mystery readings in English or Indonesian.',
   },
   {
     question: 'Does it cost anything, and what does it collect?',
@@ -246,8 +246,7 @@ export default function Landing() {
               Android or open OpenRosary in your browser.
             </p>
             <p className={styles.languageNote}>
-              Choose English or Indonesian, with more languages to come. Latin
-              prayers are available too.
+              Choose English or Indonesian. Latin prayers are available too.
             </p>
             <div className={styles.heroActions}>
               <a
@@ -440,7 +439,7 @@ export default function Landing() {
 
         <section className={styles.finalCta} aria-labelledby="final-heading">
           <div className={styles.finalCopy}>
-            <h2 id="final-heading">Ready to pray?</h2>
+            <h2 id="final-heading">Pray offline or in your browser.</h2>
             <p>Choose a mystery. Begin at your own pace.</p>
           </div>
           <div className={styles.finalActions}>

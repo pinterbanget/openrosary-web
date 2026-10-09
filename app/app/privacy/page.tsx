@@ -4,7 +4,7 @@ import ThemeToggle from '../../ThemeToggle';
 import styles from './privacy.module.css';
 
 export const metadata: Metadata = {
-  title: 'Privacy | OpenRosary',
+  title: 'Privacy · OpenRosary',
   description: 'How the OpenRosary Android app stores preferences and works offline.',
   alternates: { canonical: 'https://openrosary.ryanson.id/app/privacy' },
   icons: { icon: '/app/icon.svg' },
@@ -31,7 +31,7 @@ export default function PrivacyPage() {
         <section>
           <h2>About this policy</h2>
           <p>This policy describes the Android app. Android, Google Play, and your device manufacturer may process information independently under their own policies. Visiting this website or downloading the APK also involves the website’s hosting provider.</p>
-          <p>If the app’s data behaviour changes, this policy will be reviewed and updated before release.</p>
+          <p>If the app’s data behaviour changes, the OpenRosary project will update this policy before that release.</p>
         </section>
         <section>
           <h2>Questions about privacy</h2>
